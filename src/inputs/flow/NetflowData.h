@@ -87,11 +87,11 @@ static bool process_netflow_v1(NFSample *sample)
         memcpy(flow_sample.dst_ip.data(), &nf1_flow->dest_ip, sizeof(uint32_t));
         memcpy(flow_sample.nexthop_ip.data(), &nf1_flow->nexthop_ip, sizeof(uint32_t));
 
-        flow_sample.src_port = nf1_flow->src_port;
-        flow_sample.dst_port = nf1_flow->dest_port;
+        flow_sample.src_port = be16toh(nf1_flow->src_port);
+        flow_sample.dst_port = be16toh(nf1_flow->dest_port);
 
-        flow_sample.flow_start = nf1_flow->flow_start;
-        flow_sample.flow_finish = nf1_flow->flow_finish;
+        flow_sample.flow_start = be32toh(nf1_flow->flow_start);
+        flow_sample.flow_finish = be32toh(nf1_flow->flow_finish);
 
         flow_sample.if_index_in = be16toh(nf1_flow->if_index_in);
         flow_sample.if_index_out = be16toh(nf1_flow->if_index_out);
@@ -136,11 +136,11 @@ static bool process_netflow_v5(NFSample *sample)
         memcpy(flow_sample.dst_ip.data(), &nf5_flow->dest_ip, sizeof(uint32_t));
         memcpy(flow_sample.nexthop_ip.data(), &nf5_flow->nexthop_ip, sizeof(uint32_t));
 
-        flow_sample.src_port = nf5_flow->src_port;
-        flow_sample.dst_port = nf5_flow->dest_port;
+        flow_sample.src_port = be16toh(nf5_flow->src_port);
+        flow_sample.dst_port = be16toh(nf5_flow->dest_port);
 
-        flow_sample.flow_start = nf5_flow->flow_start;
-        flow_sample.flow_finish = nf5_flow->flow_finish;
+        flow_sample.flow_start = be32toh(nf5_flow->flow_start);
+        flow_sample.flow_finish = be32toh(nf5_flow->flow_finish);
 
         flow_sample.if_index_in = be16toh(nf5_flow->if_index_in);
         flow_sample.if_index_out = be16toh(nf5_flow->if_index_out);
@@ -190,11 +190,11 @@ static bool process_netflow_v7(NFSample *sample)
         memcpy(flow_sample.dst_ip.data(), &nf7_flow->dest_ip, sizeof(uint32_t));
         memcpy(flow_sample.nexthop_ip.data(), &nf7_flow->nexthop_ip, sizeof(uint32_t));
 
-        flow_sample.src_port = nf7_flow->src_port;
-        flow_sample.dst_port = nf7_flow->dest_port;
+        flow_sample.src_port = be16toh(nf7_flow->src_port);
+        flow_sample.dst_port = be16toh(nf7_flow->dest_port);
 
-        flow_sample.flow_start = nf7_flow->flow_start;
-        flow_sample.flow_finish = nf7_flow->flow_finish;
+        flow_sample.flow_start = be32toh(nf7_flow->flow_start);
+        flow_sample.flow_finish = be32toh(nf7_flow->flow_finish);
 
         flow_sample.if_index_in = be16toh(nf7_flow->if_index_in);
         flow_sample.if_index_out = be16toh(nf7_flow->if_index_out);
