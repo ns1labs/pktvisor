@@ -32,7 +32,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.61.0
+          version: 1.64.1
 
       - name: Setup Conan Cache
         uses: actions/cache@v3
@@ -84,7 +84,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.61.0
+          version: 1.64.1
 
       - name: Configure CMake to generate VERSION
         shell: bash
@@ -134,7 +134,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.61.0
+          version: 1.64.1
 
       - name: Configure CMake to generate VERSION
         shell: bash
@@ -279,7 +279,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.61.0
+          version: 1.64.1
 
       - name: Remove libpcap from conanfile
         shell: bash

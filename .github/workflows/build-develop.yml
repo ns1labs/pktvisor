@@ -42,7 +42,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.61.0
+          version: 1.64.1
 
       - name: Setup OSX Environment
         run: echo "SDKROOT=$(xcrun --sdk macosx --show-sdk-path)" >> $GITHUB_ENV
@@ -101,7 +101,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.61.0
+          version: 1.64.1
 
       - name: linux package install
         run: |
@@ -168,7 +168,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.61.0
+          version: 1.64.1
 
       - name: Remove libpcap from conanfile
         shell: bash
@@ -398,7 +398,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.61.0
+          version: 1.64.1
 
       - name: Configure CMake to generate VERSION
         shell: bash
