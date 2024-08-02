@@ -4,10 +4,6 @@ message(STATUS "visor-core")
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 #generate cpp code from opentelemetry-proto
-if(NOT CMAKE_CROSSCOMPILING)
-  # Workaround due to changes in protobuf conan receipt
-  set(PROTOC_PROGRAM ${CONAN_BIN_DIRS_PROTOBUF}/protoc)
-endif()
 find_package(Protobuf REQUIRED)
 set(OTELCPP_PROTO_PATH ${CONAN_OPENTELEMETRY-PROTO_ROOT}/res)
 set(BUILD_SHARED_LIBS FALSE)
