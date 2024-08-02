@@ -1,5 +1,7 @@
 message(STATUS "Visor Lib Test Helper")
 
+find_package(Catch2 REQUIRED)
+
 add_library(VisorLibTest INTERFACE)
 add_library(Visor::Lib::Test ALIAS VisorLibTest)
 
@@ -10,7 +12,7 @@ target_include_directories(VisorLibTest
 target_link_libraries(VisorLibTest
     INTERFACE
     ${CONAN_LIBS_SPDLOG}
-    ${CONAN_LIBS_CATCH2})
+    Catch2::Catch2WithMain)
 
 target_compile_features(VisorLibTest INTERFACE cxx_std_17)
 

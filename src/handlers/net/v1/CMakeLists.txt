@@ -1,5 +1,7 @@
 message(STATUS "Handler Module: Net")
 
+find_package(nlohmann_json_schema_validator REQUIRED)
+
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 corrade_add_static_plugin(VisorHandlerNet
@@ -37,7 +39,7 @@ endif()
 
 target_link_libraries(unit-tests-handler-net
         PRIVATE
-        ${CONAN_LIBS_JSON-SCHEMA-VALIDATOR}
+        nlohmann_json_schema_validator
         Visor::Handler::Net
         Visor::Handler::Dns
         Visor::Lib::Test)

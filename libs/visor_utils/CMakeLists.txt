@@ -1,5 +1,9 @@
 message(STATUS "Visor Lib Utils")
 
+find_package(Catch2 REQUIRED)
+find_package(fmt REQUIRED)
+find_package(PcapPlusPlus REQUIRED)
+
 add_library(VisorLibUtils
         utils.cpp
         )
@@ -12,12 +16,12 @@ target_include_directories(VisorLibUtils
 
 target_link_libraries(VisorLibUtils
         PUBLIC
-        ${CONAN_LIBS_PCAPPLUSPLUS}
+        PcapPlusPlus::PcapPlusPlus
         ${CONAN_LIBS_PTHREADS4W}
         ${CONAN_LIBS_LIBPCAP}
         ${CONAN_LIBS_NPCAP}
         ${CONAN_LIBS_SPDLOG}
-        ${CONAN_LIBS_FMT}
+        fmt::fmt
         )
 
 ## TEST SUITE
@@ -26,7 +30,7 @@ add_executable(unit-tests-visor-utils test_utils.cpp)
 target_link_libraries(unit-tests-visor-utils
         PRIVATE
         Visor::Lib::Utils
-        ${CONAN_LIBS_CATCH2})
+        Catch2::Catch2WithMain)
 
 add_test(NAME unit-tests-visor-utils
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/libs

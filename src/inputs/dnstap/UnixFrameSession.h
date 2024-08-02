@@ -5,11 +5,14 @@
 #pragma once
 
 #include "DnstapException.h"
-#include <arpa/inet.h>
+
+#include <cstdint>
 #include <cstring>
-#include <fstrm/fstrm.h>
 #include <functional>
 #include <memory>
+
+#include <arpa/inet.h>
+#include <fstrm/fstrm.h>
 
 namespace visor::input::dnstap {
 

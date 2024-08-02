@@ -1,5 +1,7 @@
 message(STATUS "Handler Module: DNS")
 
+find_package(nlohmann_json_schema_validator REQUIRED)
+
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 corrade_add_static_plugin(VisorHandlerDns
@@ -34,7 +36,7 @@ add_executable(unit-tests-handler-dns
 
 target_link_libraries(unit-tests-handler-dns
         PRIVATE
-        ${CONAN_LIBS_JSON-SCHEMA-VALIDATOR}
+        nlohmann_json_schema_validator
         Visor::Handler::Dns
         Visor::Lib::Test)
 

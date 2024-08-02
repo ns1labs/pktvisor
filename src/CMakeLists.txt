@@ -4,15 +4,23 @@ message(STATUS "visor-core")
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 #generate cpp code from opentelemetry-proto
-if(NOT CMAKE_CROSSCOMPILING)
-  # Workaround due to changes in protobuf conan receipt
-  set(PROTOC_PROGRAM ${CONAN_BIN_DIRS_PROTOBUF}/protoc)
-endif()
-find_package(Protobuf REQUIRED)
-set(OTELCPP_PROTO_PATH ${CONAN_OPENTELEMETRY-PROTO_ROOT}/res)
+find_package(Protobuf CONFIG REQUIRED)
+set(PROTOBUF_PROTOC_EXECUTABLE ${PROTOC_PROGRAM})
 set(BUILD_SHARED_LIBS FALSE)
 include(opentelemetry-tools)
 include(opentelemetry-proto)
+
+find_package(Catch2 REQUIRED)
+find_package(fmt REQUIRED)
+find_package(httplib REQUIRED)
+find_package(maxminddb REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(fast-cpp-csv-parser REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(PalSigslot REQUIRED)
+find_package(robin_hood REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 add_library(visor-core
         AbstractModule.cpp
@@ -43,13 +51,17 @@ target_link_libraries(visor-core
         rng
         timer
         opentelemetry_proto
-        ${CONAN_LIBS_LIBMAXMINDDB}
-        ${CONAN_LIBS_CORRADE}
-        ${CONAN_LIBS_SPDLOG}
-        ${CONAN_LIBS_FMT}
-        ${CONAN_LIBS_FAST-CPP-CSV-PARSER}
-        ${CONAN_LIBS_YAML-CPP}
-        ${CONAN_LIBS_OPENSSL}
+        maxminddb::maxminddb
+        Corrade::Corrade
+        spdlog::spdlog
+        fmt::fmt
+        openssl::openssl
+        httplib::httplib
+        nlohmann_json::nlohmann_json
+        fast-cpp-csv-parser::fast-cpp-csv-parser
+        Pal::Sigslot
+        robin_hood::robin_hood
+        yaml-cpp::yaml-cpp
         ${VISOR_STATIC_PLUGINS}
         )
 
@@ -76,8 +88,8 @@ target_include_directories(unit-tests-visor-core PRIVATE ${CMAKE_CURRENT_SOURCE_
 target_link_libraries(unit-tests-visor-core 
         PRIVATE
         Visor::Core
-        ${VISOR_STATIC_PLUGINS}
-        ${CONAN_LIBS_CATCH2})
+        Catch2::Catch2WithMain
+        ${VISOR_STATIC_PLUGINS})
 
 add_test(NAME unit-tests-visor-core
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src

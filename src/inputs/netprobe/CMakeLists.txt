@@ -1,5 +1,7 @@
 message(STATUS "Input Module: Net Probe")
 
+find_package(uvw REQUIRED)
+
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 corrade_add_static_plugin(VisorInputNetProbe
@@ -21,6 +23,7 @@ target_link_libraries(VisorInputNetProbe
         PUBLIC
         Visor::Core
         Visor::Lib::Tcp
+        uvw::uvw
         ${CONAN_LIBS_LIBUV}
         ${CONAN_LIBS_UVW}
         ${CONAN_LIBS_PCAPPLUSPLUS}

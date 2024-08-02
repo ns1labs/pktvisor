@@ -1,5 +1,8 @@
 message(STATUS "Input Module: Flow")
 
+find_package(PcapPlusPlus REQUIRED)
+find_package(uvw REQUIRED)
+
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 corrade_add_static_plugin(VisorInputFlow ${CMAKE_CURRENT_BINARY_DIR}
@@ -19,9 +22,10 @@ target_link_libraries(VisorInputFlow
         netflow
         sflow
         Visor::Core
+        PcapPlusPlus::PcapPlusPlus
+        uvw::uvw
         ${CONAN_LIBS_LIBUV}
         ${CONAN_LIBS_UVW}
-        ${CONAN_LIBS_PCAPPLUSPLUS}
         ${CONAN_LIBS_PTHREADS4W}
         ${CONAN_LIBS_LIBPCAP}
         ${CONAN_LIBS_NPCAP}

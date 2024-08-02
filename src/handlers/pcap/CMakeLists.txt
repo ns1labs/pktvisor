@@ -1,5 +1,7 @@
 message(STATUS "Handler Module: Pcap")
 
+find_package(nlohmann_json_schema_validator REQUIRED)
+
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 corrade_add_static_plugin(VisorHandlerPcap
@@ -29,7 +31,7 @@ add_executable(unit-tests-handler-pcap
 
 target_link_libraries(unit-tests-handler-pcap
         PRIVATE
-        ${CONAN_LIBS_JSON-SCHEMA-VALIDATOR}
+        nlohmann_json_schema_validator
         Visor::Handler::Pcap
         Visor::Lib::Test)
 

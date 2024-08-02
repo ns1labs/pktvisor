@@ -1,5 +1,7 @@
 message(STATUS "Input Module: Pcap")
 
+find_package(Catch2 REQUIRED)
+
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 corrade_add_static_plugin(VisorInputPcap ${CMAKE_CURRENT_BINARY_DIR}
@@ -34,7 +36,7 @@ add_executable(unit-tests-input-pcap
 
 target_link_libraries(unit-tests-input-pcap
         PRIVATE Visor::Input::Pcap
-        ${CONAN_LIBS_CATCH2})
+        Catch2::Catch2WithMain)
 
 add_test(NAME unit-tests-input-pcap
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src

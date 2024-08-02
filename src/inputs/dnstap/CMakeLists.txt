@@ -2,6 +2,10 @@ message(STATUS "Input Module: Dnstap")
 
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
+find_package(Protobuf REQUIRED)
+find_package(uvw REQUIRED)
+
+set(PROTOBUF_PROTOC_EXECUTABLE ${PROTOC_PROGRAM})
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS pb/dnstap.proto)
 
 if(NOT WIN32)
@@ -38,7 +42,7 @@ target_link_libraries(VisorInputDnstap
         Visor::Lib::Utils
         ${CONAN_LIBS_PROTOBUF}
         ${CONAN_LIBS_LIBUV}
-        ${CONAN_LIBS_UVW}
+        uvw::uvw
         )
 
 set(VISOR_STATIC_PLUGINS ${VISOR_STATIC_PLUGINS} Visor::Input::Dnstap PARENT_SCOPE)

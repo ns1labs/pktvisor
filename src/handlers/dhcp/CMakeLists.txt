@@ -1,5 +1,7 @@
 message(STATUS "Handler Module: DHCP")
 
+find_package(nlohmann_json_schema_validator REQUIRED)
+
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 corrade_add_static_plugin(VisorHandlerDhcp
@@ -28,7 +30,7 @@ add_executable(unit-tests-handler-dhcp
 
 target_link_libraries(unit-tests-handler-dhcp
         PRIVATE
-        ${CONAN_LIBS_JSON-SCHEMA-VALIDATOR}
+        nlohmann_json_schema_validator
         Visor::Handler::Dhcp
         Visor::Lib::Test)
 

@@ -1,5 +1,7 @@
 message(STATUS "Handler Module: BGP")
 
+find_package(nlohmann_json_schema_validator REQUIRED)
+
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 corrade_add_static_plugin(VisorHandlerBgp
@@ -26,7 +28,7 @@ add_executable(unit-tests-handler-bgp
 
 target_link_libraries(unit-tests-handler-bgp
         PRIVATE
-        ${CONAN_LIBS_JSON-SCHEMA-VALIDATOR}
+        nlohmann_json_schema_validator
         Visor::Handler::Bgp
         Visor::Lib::Test)
 
