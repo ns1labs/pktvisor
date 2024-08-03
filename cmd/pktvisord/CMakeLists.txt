@@ -6,13 +6,16 @@ if(NOT WIN32)
     set(ADDITIONAL_LIBS resolv)
 endif()
 
+if(NOT CRASHPAD_NOT_SUPPORTED)
+    find_package(crashpad)
+    set (ADDITIONAL_LIBS ${ADDITIONAL_LIBS} crashpad::crashpad)
+endif()
 
 target_link_libraries(pktvisord
         PRIVATE
         docopt_s
         timer
         ${ADDITIONAL_LIBS}
-        ${CONAN_LIBS_DOCOPT.CPP}
         Visor::Core
         ${VISOR_STATIC_PLUGINS}
         )
