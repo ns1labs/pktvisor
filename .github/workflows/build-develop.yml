@@ -172,8 +172,7 @@ jobs:
 
       - name: Remove libpcap from conanfile
         shell: bash
-        run: |
-          sed -i -e "s/libpcap.*//g" "${{github.workspace}}\conanfile.py"
+        run:  sed -i "/libpcap/d" "${{github.workspace}}\conanfile.py"
 
       - name: Setup Conan Cache
         uses: actions/cache@v3
