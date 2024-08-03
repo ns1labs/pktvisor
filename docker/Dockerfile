@@ -29,7 +29,7 @@ RUN \
     conan config set general.revisions_enabled=1
 
 RUN \
-    PKG_CONFIG_PATH=/local/lib/pkgconfig cmake -DCMAKE_BUILD_TYPE=Release /pktvisor-src && \
+    PKG_CONFIG_PATH=/local/lib/pkgconfig cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake /pktvisor-src && \
     make all -j 4
 
 FROM golang:latest AS gobuild

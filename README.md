@@ -608,7 +608,7 @@ cd pktvisor
 mkdir build && cd build
 
 # configure and handle dependencies 
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake ..
 
 # build and run tests
 make all test
