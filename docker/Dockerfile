@@ -19,7 +19,7 @@ COPY ./golang/ /pktvisor-src/golang/
 COPY ./integration_tests/ /pktvisor-src/integration_tests/
 COPY ./cmake/ /pktvisor-src/cmake/
 COPY ./CMakeLists.txt /pktvisor-src/
-COPY ./conanfile.txt /pktvisor-src/
+COPY ./conanfile.py /pktvisor-src/
 
 WORKDIR /tmp/build
 

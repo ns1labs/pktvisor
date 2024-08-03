@@ -25,7 +25,6 @@ class Pktvisor(ConanFile):
         self.requires("yaml-cpp/0.8.0")
         self.requires("robin-hood-hashing/3.11.5")
         self.requires("libcurl/8.5.0")
-        self.requires("linux-syscall-support/2022.10.12", force=True)
         self.requires("crashpad/cci.20220219")
         self.requires("zlib/[>=1.2.10 <1.3]")
         

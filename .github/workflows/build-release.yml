@@ -38,7 +38,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{github.workspace}}/build/conan_home/
-          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
+          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-
 
       - name: linux package install
@@ -284,13 +284,13 @@ jobs:
       - name: Remove libpcap from conanfile
         shell: bash
         run: |
-          sed -i -e "s/libpcap.*//g" "${{github.workspace}}\conanfile.txt"
+          sed -i -e "s/libpcap.*//g" "${{github.workspace}}\conanfile.py"
 
       - name: Setup Conan Cache
         uses: actions/cache@v3
         with:
           path: ${{github.workspace}}/build/conan_home/
-          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
+          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-
 
       - name: Configure CMake
@@ -405,7 +405,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{github.workspace}}/build/conan_home/
-          key: conan-${{ runner.os }}-arm64-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
+          key: conan-${{ runner.os }}-arm64-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-arm64-
 
       - name: Build pktvisord + push symbol to backtrace.io
@@ -527,7 +527,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{github.workspace}}/build/conan_home/
-          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
+          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-
 
       - name: Build pktvisord + push symbol to backtrace.io
