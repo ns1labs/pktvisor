@@ -84,9 +84,7 @@ jobs:
           cat > "${{env.CONAN_USER_HOME}}/host" << "EOF"
           [settings]
           os=Linux
-          os_build=Linux
           arch=${{matrix.conan_arch}}
-          arch_build=x86_64
           compiler=gcc
           compiler.version=11
           compiler.libcxx=libstdc++11
