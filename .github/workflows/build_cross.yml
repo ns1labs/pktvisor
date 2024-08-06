@@ -124,6 +124,7 @@ jobs:
 
       - name: Configure
         run: |
+          mkdir build
           cd build
           source environment.sh.env
           export CC CXX
