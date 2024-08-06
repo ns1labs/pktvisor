@@ -85,15 +85,13 @@ jobs:
           [settings]
           os=Linux
           arch=${{matrix.conan_arch}}
-          compiler=gcc
-          compiler.version=11
-          compiler.libcxx=libstdc++11
-          compiler.libc=musl
           build_type=Release
           [buildenv]
           CC=${{github.workspace}}/toolchain/bin/${{matrix.cc}}
           CXX=${{github.workspace}}/toolchain/bin/${{matrix.cxx}}
           LDFLAGS=${{matrix.ldflags}}
+          [conf]
+          user.confvar:libc=musl
           EOF
 
       - name: Restore sccache
