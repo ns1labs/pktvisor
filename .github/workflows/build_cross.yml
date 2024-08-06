@@ -81,7 +81,7 @@ jobs:
 
       - name: Create Conan host profile
         run: |
-          cat > "${{env.CONAN_USER_HOME}}/.conan/profiles/host" << "EOF"
+          cat > "${{env.CONAN_USER_HOME}}/host" << "EOF"
           [settings]
           os=Linux
           os_build=Linux
@@ -116,11 +116,11 @@ jobs:
       - name: Remove crashpad from conanfile
         run: sed -i "/libpcap/d" ${{github.workspace}}/src/conanfile.py
 
-      - name: Install dependencies
-        run: |
-          mkdir build
-          cd build
-          conan install -pr:b default -pr:h host -g virtualenv --build=missing "${{github.workspace}}/src"
+      # - name: Install dependencies
+      #   run: |
+      #     mkdir build
+      #     cd build
+      #     conan install -pr:b default -pr:h host -g virtualenv --build=missing "${{github.workspace}}/src"
 
       - name: Configure
         run: |
@@ -131,9 +131,9 @@ jobs:
           cmake "${{github.workspace}}/src" \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake \
+            -DCONAN_HOST_PROFILE="${{env.CONAN_USER_HOME}}/host" \
             -DCRASHPAD_NOT_SUPPORTED=true \
             -DCMAKE_C_COMPILER_LAUNCHER="${{github.workspace}}/bin/sccache" -DCMAKE_CXX_COMPILER_LAUNCHER="${{github.workspace}}/bin/sccache" \
-            -DPKTVISOR_CONAN_INIT=OFF -DPKTVISOR_CONAN_BUILD="never" -DPKTVISOR_CONAN_BUILD_PROFILE="default" -DPKTVISOR_CONAN_HOST_PROFILE="host" \
             -DProtobuf_PROTOC_EXECUTABLE=$(command -v protoc) \
             -DCORRADE_RC_PROGRAM=$(command -v corrade-rc) \
             -DCMAKE_CXX_STANDARD_LIBRARIES=-latomic
