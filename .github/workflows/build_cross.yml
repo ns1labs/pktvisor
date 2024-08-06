@@ -112,7 +112,7 @@ jobs:
           path: src
 
       - name: Remove crashpad from conanfile
-        run: sed -i "/libpcap/d" ${{github.workspace}}/src/conanfile.py
+        run: sed -i "/crashpad/d" ${{github.workspace}}/src/conanfile.py
 
       # - name: Install dependencies
       #   run: |
