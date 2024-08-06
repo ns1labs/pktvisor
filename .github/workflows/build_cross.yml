@@ -87,6 +87,8 @@ jobs:
           arch=${{matrix.conan_arch}}
           build_type=Release
           compiler=gcc
+          compiler.libcxx=libstdc++11
+          compiler.version=11
           [buildenv]
           CC=${{github.workspace}}/toolchain/bin/${{matrix.cc}}
           CXX=${{github.workspace}}/toolchain/bin/${{matrix.cxx}}
