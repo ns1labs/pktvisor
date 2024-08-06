@@ -14,7 +14,7 @@ class Pktvisor(ConanFile):
         self.requires("json-schema-validator/2.3.0")
         self.requires("libmaxminddb/1.8.0")
         self.requires("nlohmann_json/3.11.3")
-        self.requires("openssl/1.1.1w")
+        self.requires("openssl/3.2.2")
         if self.settings.os != "Windows":
             self.requires("libpcap/1.10.4", force=True)
         self.requires("opentelemetry-proto/1.0.0")
