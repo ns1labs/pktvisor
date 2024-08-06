@@ -95,6 +95,8 @@ jobs:
           LDFLAGS=${{matrix.ldflags}}
           [conf]
           user.confvar:libc=musl
+          [platform_tool_requires]
+          protobuf/3.21.12
           EOF
 
       - name: Restore sccache
