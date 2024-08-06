@@ -126,7 +126,6 @@ jobs:
         run: |
           mkdir build
           cd build
-          source environment.sh.env
           export CC CXX
           export LDFLAGS=-static
           cmake "${{github.workspace}}/src" \
@@ -135,8 +134,6 @@ jobs:
             -DCONAN_HOST_PROFILE="${{env.CONAN_USER_HOME}}/host" \
             -DCRASHPAD_NOT_SUPPORTED=true \
             -DCMAKE_C_COMPILER_LAUNCHER="${{github.workspace}}/bin/sccache" -DCMAKE_CXX_COMPILER_LAUNCHER="${{github.workspace}}/bin/sccache" \
-            -DProtobuf_PROTOC_EXECUTABLE=$(command -v protoc) \
-            -DCORRADE_RC_PROGRAM=$(command -v corrade-rc) \
             -DCMAKE_CXX_STANDARD_LIBRARIES=-latomic
 
       - name: Build
