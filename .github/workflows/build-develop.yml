@@ -151,7 +151,7 @@ jobs:
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
 
-    runs-on: windows-2019
+    runs-on: windows-latest
     outputs:
       version_number: ${{ env.VERSION }}
     steps:
