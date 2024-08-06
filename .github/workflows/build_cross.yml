@@ -86,6 +86,7 @@ jobs:
           os=Linux
           arch=${{matrix.conan_arch}}
           build_type=Release
+          compiler=gcc
           [buildenv]
           CC=${{github.workspace}}/toolchain/bin/${{matrix.cc}}
           CXX=${{github.workspace}}/toolchain/bin/${{matrix.cxx}}
