@@ -90,7 +90,7 @@ jobs:
 
       - name: Create Conan host profile
         run: |
-          cat > "${{github.workspace}}/host" << "EOF"
+          cat > "${{github.workspace}}/build/profiles/host" << "EOF"
           [settings]
           os=Linux
           arch=${{matrix.conan_arch}}

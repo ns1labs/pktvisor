@@ -5,13 +5,8 @@
 #include "PcapInputStream.h"
 #include "NetworkInterfaceScan.h"
 #include "ThreadName.h"
+#include <pcap/pcap.h>
 #include <timer.hpp>
-
-#ifndef _WIN32
-// Required for PcapPlusPlus on UNIX
-#include <pcap.h>
-#endif
-
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
