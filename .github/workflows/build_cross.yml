@@ -71,13 +71,11 @@ jobs:
       - name: Install Conan
         run: pip install --no-cache-dir 'conan==2.6.0' --force-reinstall
 
-      # - name: Create Conan configuration
-      #   run: |
-      #     # init config
-      #     CONAN_V2_MODE=1 conan config init
-      #     conan config set general.revisions_enabled=1
-      #     # add custom compiler settings for libc
-      #     python3 -c 'import yaml; p = "${{env.CONAN_USER_HOME}}/.conan/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["None", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
+      - name: Create Conan configuration
+        run: |
+          conan profile detect
+          # add custom compiler settings for libc
+          python3 -c 'import yaml; p = "${{env.CONAN_USER_HOME}}/build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["None", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
 
       - name: Create Conan host profile
         run: |
@@ -89,14 +87,11 @@ jobs:
           compiler=gcc
           compiler.libcxx=libstdc++11
           compiler.version=11
+          compiler.libc=musl
           [buildenv]
           CC=${{github.workspace}}/toolchain/bin/${{matrix.cc}}
           CXX=${{github.workspace}}/toolchain/bin/${{matrix.cxx}}
           LDFLAGS=${{matrix.ldflags}}
-          [conf]
-          user.confvar:libc=musl
-          [platform_tool_requires]
-          protobuf/3.21.12
           EOF
 
       - name: Restore sccache
@@ -116,15 +111,13 @@ jobs:
       - name: Remove crashpad from conanfile
         run: sed -i "/crashpad/d" ${{github.workspace}}/src/conanfile.py
 
-      # - name: Install dependencies
-      #   run: |
-      #     mkdir build
-      #     cd build
-      #     conan install -pr:b default -pr:h host -g virtualenv --build=missing "${{github.workspace}}/src"
+      - name: Install dependencies
+        run: |
+          cd build
+          conan install -pr:b default -pr:h host -g virtualenv --build=missing "${{github.workspace}}/src"
 
       - name: Configure
         run: |
-          mkdir build
           cd build
           export CC CXX
           export LDFLAGS=-static
