@@ -72,6 +72,7 @@ jobs:
 
       - name: Create Conan configuration
         run: |
+          ls
           conan profile detect
           # add custom compiler settings for libc
           python3 -c 'import yaml; p = "${{github.workspace}}/build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["None", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
