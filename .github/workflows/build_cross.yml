@@ -104,23 +104,21 @@ jobs:
 
       - name: Checkout sources
         uses: actions/checkout@v3
-        with:
-          path: src
 
       - name: Remove crashpad from conanfile
-        run: sed -i "/crashpad/d" ${{github.workspace}}/src/conanfile.py
+        run: sed -i "/crashpad/d" ${{github.workspace}}/conanfile.py
 
       - name: Install dependencies
         run: |
           cd build
-          conan install -pr:b default -pr:h host -g virtualenv --build=missing "${{github.workspace}}/src"
+          conan install -pr:b default -pr:h host -g virtualenv --build=missing "${{github.workspace}}/"
 
       - name: Configure
         run: |
           cd build
           export CC CXX
           export LDFLAGS=-static
-          cmake "${{github.workspace}}/src" \
+          cmake "${{github.workspace}}/" \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake \
             -DCONAN_HOST_PROFILE="${{github.workspace}}/host" \
