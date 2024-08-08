@@ -113,7 +113,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          export CC CXX
+          export CC=${{github.workspace}}/toolchain/bin/${{matrix.cc}}
+          export CXX=${{github.workspace}}/toolchain/bin/${{matrix.cxx}}
           cd build
           conan install -pr:b default -pr:h host --build=missing "${{github.workspace}}/"
 
