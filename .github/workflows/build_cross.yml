@@ -111,12 +111,12 @@ jobs:
       - name: Remove crashpad from conanfile
         run: sed -i "/crashpad/d" ${{github.workspace}}/conanfile.py
 
-      - name: Install dependencies
-        run: |
-          export CC=${{github.workspace}}/toolchain/bin/${{matrix.cc}}
-          export CXX=${{github.workspace}}/toolchain/bin/${{matrix.cxx}}
-          cd build
-          conan install -pr:b default -pr:h host --build=missing "${{github.workspace}}/"
+      # - name: Install dependencies
+      #   run: |
+      #     export CC=${{github.workspace}}/toolchain/bin/${{matrix.cc}}
+      #     export CXX=${{github.workspace}}/toolchain/bin/${{matrix.cxx}}
+      #     cd build
+      #     conan install -pr:b default -pr:h host --build=missing "${{github.workspace}}/"
 
       - name: Configure
         run: |
