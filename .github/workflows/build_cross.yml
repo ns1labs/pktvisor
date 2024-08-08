@@ -113,6 +113,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          export CC CXX
           cd build
           conan install -pr:b default -pr:h host --build=missing "${{github.workspace}}/"
 
