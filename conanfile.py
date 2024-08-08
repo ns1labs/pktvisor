@@ -30,6 +30,6 @@ class Pktvisor(ConanFile):
         self.requires("zlib/[>=1.2.10 <1.3]")
         
 
-    # def build_requirements(self):
-    #     self.tool_requires("corrade/2020.06")
-    #     self.tool_requires("protobuf/3.21.12")
+    def build_requirements(self):
+        self.tool_requires("corrade/2020.06")
+        self.tool_requires("protobuf/3.21.12")
