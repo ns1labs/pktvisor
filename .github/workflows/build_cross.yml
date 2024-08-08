@@ -82,11 +82,11 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v3
 
-      - name: Create Conan configuration
-        run: |
-          conan profile detect
-          # add custom compiler settings for libc
-          python3 -c 'import yaml; p = "${{github.workspace}}/build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["null", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
+      # - name: Create Conan configuration
+      #   run: |
+      #     conan profile detect
+      #     # add custom compiler settings for libc
+      #     python3 -c 'import yaml; p = "${{github.workspace}}/build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["null", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
 
       - name: Create Conan host profile
         run: |
@@ -98,7 +98,8 @@ jobs:
           compiler=gcc
           compiler.libcxx=libstdc++11
           compiler.version=11
-          compiler.libc=musl
+          [conf]
+          user.confvar:libc=musl
           [buildenv]
           CC=${{github.workspace}}/toolchain/bin/${{matrix.cc}}
           CXX=${{github.workspace}}/toolchain/bin/${{matrix.cxx}}
