@@ -120,6 +120,7 @@ jobs:
 
       - name: Configure
         run: |
+          mkdir build
           cd build
           export CC CXX
           export LDFLAGS=-static
