@@ -88,8 +88,9 @@ jobs:
       #     # add custom compiler settings for libc
       #     python3 -c 'import yaml; p = "${{github.workspace}}/build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["null", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
 
-      - name: Create Conan host profile
+      - name: Create Conan default and host profiles
         run: |
+          conan profile detect
           cat > "${{github.workspace}}/build/profiles/host" << "EOF"
           [settings]
           os=Linux
