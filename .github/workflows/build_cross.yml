@@ -126,7 +126,7 @@ jobs:
           cmake "${{github.workspace}}/" \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake \
-            -DCONAN_HOST_PROFILE="${{github.workspace}}/host" \
+            -DCONAN_HOST_PROFILE="${{github.workspace}}/build/profiles/host" \
             -DCRASHPAD_NOT_SUPPORTED=true \
             -DCMAKE_C_COMPILER_LAUNCHER="${{github.workspace}}/bin/sccache" -DCMAKE_CXX_COMPILER_LAUNCHER="${{github.workspace}}/bin/sccache" \
             -DCMAKE_CXX_STANDARD_LIBRARIES=-latomic
