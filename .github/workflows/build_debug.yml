@@ -20,7 +20,7 @@ jobs:
     outputs:
       version_number: ${{ steps.build.outputs.version }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Create Build Environment
         # Some projects don't allow in-source building, so create a separate build directory
@@ -91,7 +91,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
@@ -125,7 +125,7 @@ jobs:
         run: ls -lha .
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pktvisor-artifacts
           path: ./
@@ -183,7 +183,7 @@ jobs:
           sed -i -e "s/CP_URL/$ESCAPED_REPLACE/g" docker/run.sh
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}

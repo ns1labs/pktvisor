@@ -26,7 +26,7 @@ jobs:
 
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Create Build Environment
         # Some projects don't allow in-source building, so create a separate build directory
@@ -88,7 +88,7 @@ jobs:
       version_number: ${{ env.VERSION }}
       commit_hash: ${{ env.COMMIT }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Create Build Environment
         # Some projects don't allow in-source building, so create a separate build directory
@@ -155,7 +155,7 @@ jobs:
     outputs:
       version_number: ${{ env.VERSION }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Create Build Environment
         # Some projects don't allow in-source building, so create a separate build directory
@@ -221,7 +221,7 @@ jobs:
           Get-ChildItem -Force ${{github.workspace}}\build\bin
                          
       - name: Persist to workspace
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: windows-build
           path: |
@@ -235,7 +235,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:    
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Attach to workspace
         uses: actions/download-artifact@v3
@@ -283,7 +283,7 @@ jobs:
     outputs:
       version_number: ${{ env.VERSION }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
@@ -331,14 +331,14 @@ jobs:
         run: echo ${{ env.REF_TAG }}
         
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.ORB_DOCKERHUB_USERNAME }}
           password: ${{ secrets.ORB_DOCKERHUB_TOKEN }}
@@ -389,7 +389,7 @@ jobs:
     runs-on: ubuntu-latest
     #if: github.event_name != 'pull_request'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
@@ -440,13 +440,13 @@ jobs:
       - name: Upload pktvisor-cli artifact
         env:
           BINARY_NAME: pktvisor-cli-linux-x86_64-${{ env.VERSION }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.BINARY_NAME }}
           path: ${{github.workspace}}/${{ env.BINARY_NAME }}
           
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.ORB_DOCKERHUB_USERNAME }}
           password: ${{ secrets.ORB_DOCKERHUB_TOKEN }}
@@ -468,7 +468,7 @@ jobs:
           mv pktvisor-x86_64.AppImage pktvisor-x86_64-${{ env.VERSION }}.AppImage
 
       - name: Upload AppImage artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: pktvisor-x86_64-${{ env.VERSION }}.AppImage
           path: ${{github.workspace}}/appimage/pktvisor-x86_64-${{ env.VERSION }}.AppImage
@@ -493,7 +493,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Generate runner token
         id: token
@@ -553,7 +553,7 @@ jobs:
           terraform output -raw ip > ip.txt
           
       - name: Persist IP to workspace
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ip
           path: |
@@ -561,7 +561,7 @@ jobs:
           retention-days: 1
 
       - name: Persist to workspace
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: terraform
           path: |
@@ -577,7 +577,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - uses: AutoModality/action-clean@v1
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Locking pktvisor integration test state
         run: |
@@ -618,7 +618,7 @@ jobs:
           echo ${{ needs.package-amd64.outputs.version_number }} > ./automated_tests/output/VERSION 
 
       - name: Persist to workspace
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: workspace
           path: |
@@ -689,7 +689,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Attach to workspace
         uses: actions/download-artifact@v2
@@ -734,7 +734,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: Get branch name
         shell: bash
@@ -797,7 +797,7 @@ jobs:
           terraform output -raw ip > ip.txt
           
       - name: Persist IP to workspace
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ip-arm
           path: |
@@ -805,7 +805,7 @@ jobs:
           retention-days: 1
 
       - name: Persist to workspace
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: terraform2
           path: |
@@ -822,7 +822,7 @@ jobs:
           sudo chown -R $USER:$USER $GITHUB_WORKSPACE
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
@@ -863,7 +863,7 @@ jobs:
           echo "DRAFT=true" >> $GITHUB_ENV
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -942,7 +942,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Attach to workspace
         uses: actions/download-artifact@v2
@@ -985,7 +985,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:    
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
