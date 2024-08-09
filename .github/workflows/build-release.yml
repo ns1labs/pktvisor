@@ -349,7 +349,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Attach to workspace
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: windows-build
           
@@ -394,7 +394,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Attach to workspace
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: workspace
 
@@ -516,7 +516,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Attach to workspace
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: workspace
 
@@ -634,7 +634,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Attach to workspace
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: ip-arm
 
@@ -673,7 +673,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Attach to workspace
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: terraform
           path: .github/hosted-runner/arm64/
