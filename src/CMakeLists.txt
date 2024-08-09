@@ -5,6 +5,7 @@ set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 #generate cpp code from opentelemetry-proto
 find_package(Protobuf REQUIRED)
+find_program(PROTOC_EXECUTABLE NAMES protoc)
 set(OTELCPP_PROTO_PATH ${CONAN_OPENTELEMETRY-PROTO_ROOT}/res)
 set(BUILD_SHARED_LIBS FALSE)
 include(opentelemetry-tools)
