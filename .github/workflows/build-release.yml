@@ -35,7 +35,7 @@ jobs:
           version: 1.64.1
 
       - name: Setup Conan Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{github.workspace}}/build/conan_home/
           key: conan-${{ runner.os }}-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
@@ -287,7 +287,7 @@ jobs:
           sed -i -e "s/libpcap.*//g" "${{github.workspace}}\conanfile.txt"
 
       - name: Setup Conan Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{github.workspace}}/build/conan_home/
           key: conan-${{ runner.os }}-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
@@ -402,7 +402,7 @@ jobs:
         run: cmake -E make_directory ${{github.workspace}}/build
 
       - name: Setup Conan Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{github.workspace}}/build/conan_home/
           key: conan-${{ runner.os }}-arm64-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
@@ -524,7 +524,7 @@ jobs:
         run: cmake -E make_directory ${{github.workspace}}/build
 
       - name: Setup Conan Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{github.workspace}}/build/conan_home/
           key: conan-${{ runner.os }}-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
