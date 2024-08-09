@@ -8,10 +8,13 @@
 #include <timer.hpp>
 #ifdef __GNUC__
 #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#pragma GCC diagnostic ignored "-Woverflow"
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma clang diagnostic ignored "-Wrange-loop-analysis"
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #endif
 #include <cpc_sketch.hpp>
 #include <frequent_items_sketch.hpp>
