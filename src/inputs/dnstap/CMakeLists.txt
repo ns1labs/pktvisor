@@ -36,7 +36,6 @@ target_link_libraries(VisorInputDnstap
         ${DNSTAP_ADDITIONAL_LIBS}
         Visor::Core
         Visor::Lib::Utils
-        ${CONAN_LIBS_PROTOBUF}
         ${CONAN_LIBS_LIBUV}
         ${CONAN_LIBS_UVW}
         )
