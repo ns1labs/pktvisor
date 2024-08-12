@@ -49,6 +49,7 @@ target_link_libraries(visor-core
         ${CONAN_LIBS_FAST-CPP-CSV-PARSER}
         ${CONAN_LIBS_YAML-CPP}
         ${CONAN_LIBS_OPENSSL}
+        ${CONAN_LIBS_ZLIB}
         ${VISOR_STATIC_PLUGINS}
         )
 

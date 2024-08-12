@@ -27,7 +27,6 @@ protobuf/5.27.0
 
 [options]
 pcapplusplus:immediate_mode=True
-openssl:no_zlib=True
 
 [generators]
 cmake_find_package
