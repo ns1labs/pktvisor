@@ -18,7 +18,7 @@ uvw/3.4.0
 libpcap/1.10.4
 yaml-cpp/0.8.0
 robin-hood-hashing/3.11.5
-libcurl/8.8.0
+libcurl/8.9.1
 crashpad/cci.20220219
 
 [tool_requires]
