@@ -490,7 +490,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       runner_token: ${{ steps.token.outputs.runner }}
-    if: github.event_name != 'pull_request'
+    # if: github.event_name != 'pull_request'
+    if: false  # This job will never run
     steps:
       - name: Checkout
         uses: actions/checkout@v4

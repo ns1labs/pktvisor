@@ -176,7 +176,8 @@ jobs:
     outputs:
       runner_token: ${{ steps.token.outputs.runner }}
       runner_label: ${{ env.RUNNER_LABEL }}
-    if: github.event_name != 'pull_request'
+    # if: github.event_name != 'pull_request'
+    if: false  # This job will never run
     steps:
       - name: Checkout
         uses: actions/checkout@v4        
