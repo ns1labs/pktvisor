@@ -3,9 +3,6 @@ name: Debug Builds
 on:
   push:
     branches: [ develop, master, release/** ]
-  pull_request:
-      branches:
-        - develop
 
 env:
   CTEST_OUTPUT_ON_FAILURE: 1
