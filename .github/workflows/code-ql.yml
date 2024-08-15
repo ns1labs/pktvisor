@@ -34,6 +34,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: free disk space
+      run: | 
+        sudo swapoff -a
+        sudo rm -f /swapfile
+        sudo apt clean
+        docker rmi $(docker image ls -aq)
+        df -h
+
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
