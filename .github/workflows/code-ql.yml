@@ -5,6 +5,9 @@ on:
   schedule:
   #run 5 minutes after midnight daily
     - cron: '5 0 * * *'
+  pull_request:
+      branches:
+        - develop
 
 jobs:
   analyze:
