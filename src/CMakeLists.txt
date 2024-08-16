@@ -3,8 +3,17 @@ message(STATUS "visor-core")
 
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
-#generate cpp code from opentelemetry-proto
 find_package(Protobuf REQUIRED)
+find_package(fmt REQUIRED)
+find_package(httplib REQUIRED)
+find_package(maxminddb REQUIRED)
+find_package(fast-cpp-csv-parser REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(yaml-cpp REQUIRED)
+find_package(Catch2 REQUIRED)
+
+#generate cpp code from opentelemetry-proto
 find_program(PROTOBUF_PROTOC_EXECUTABLE NAMES protoc PATHS ${CONAN_BIN_DIRS_PROTOBUF})
 set(OTELCPP_PROTO_PATH ${CONAN_OPENTELEMETRY-PROTO_ROOT}/res)
 set(BUILD_SHARED_LIBS FALSE)
@@ -40,16 +49,14 @@ target_link_libraries(visor-core
         rng
         timer
         opentelemetry_proto
-        ${CONAN_LIBS_PROTOBUF}
-        ${CONAN_LIBS_ABSEIL}
-        ${CONAN_LIBS_LIBMAXMINDDB}
-        ${CONAN_LIBS_CORRADE}
-        ${CONAN_LIBS_SPDLOG}
-        ${CONAN_LIBS_FMT}
-        ${CONAN_LIBS_FAST-CPP-CSV-PARSER}
-        ${CONAN_LIBS_YAML-CPP}
-        ${CONAN_LIBS_OPENSSL}
-        ${CONAN_LIBS_ZLIB}
+        protobuf::libprotobuf
+        maxminddb::maxminddb
+        Corrade::Corrade
+        spdlog::spdlog
+        fmt::fmt
+        fast-cpp-csv-parser::fast-cpp-csv-parser
+        yaml-cpp::yaml-cpp
+        OpenSSL::SSL
         ${VISOR_STATIC_PLUGINS}
         )
 
@@ -77,7 +84,7 @@ target_link_libraries(unit-tests-visor-core
         PRIVATE
         Visor::Core
         ${VISOR_STATIC_PLUGINS}
-        ${CONAN_LIBS_CATCH2})
+        catch2::catch2_with_main)
 
 add_test(NAME unit-tests-visor-core
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
