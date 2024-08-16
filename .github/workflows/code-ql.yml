@@ -38,6 +38,9 @@ jobs:
       run: | 
         sudo swapoff -a
         sudo rm -f /swapfile
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /opt/ghc
         sudo apt clean
         docker rmi $(docker image ls -aq)
         df -h
