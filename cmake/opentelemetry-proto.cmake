@@ -314,7 +314,7 @@ if(OPENTELEMETRY_INSTALL)
 endif()
 
 if(TARGET protobuf::libprotobuf)
-  target_link_libraries(opentelemetry_proto PUBLIC ${CONAN_LIBS_PROTOBUF})
+  target_link_libraries(opentelemetry_proto PUBLIC protobuf::libprotobuf)
 else() # cmake 3.8 or lower
   target_include_directories(opentelemetry_proto
                              PUBLIC ${Protobuf_INCLUDE_DIRS})

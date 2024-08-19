@@ -1,16 +1,21 @@
 add_executable(pktvisord main.cpp)
 
+find_package(docopt REQUIRED)
+
 if(NOT WIN32)
     set(ADDITIONAL_LIBS resolv)
 endif()
 
+if(NOT CRASHPAD_NOT_SUPPORTED)
+    find_package(crashpad REQUIRED)
+    set(ADDITIONAL_LIBS ${ADDITIONAL_LIBS} crashpad::handler)
+endif()
 
 target_link_libraries(pktvisord
         PRIVATE
-        ${CONAN_LIBS_CRASHPAD}
         timer
         ${ADDITIONAL_LIBS}
-        ${CONAN_LIBS_DOCOPT.CPP}
+        docopt::docopt
         Visor::Core
         ${VISOR_STATIC_PLUGINS}
         )
