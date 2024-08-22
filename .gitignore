@@ -13,3 +13,4 @@ localconfig/
 .cache/
 .vscode/
 build/
+CMakeUserPresets.json

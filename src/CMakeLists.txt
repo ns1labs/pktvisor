@@ -84,7 +84,7 @@ target_link_libraries(unit-tests-visor-core
         PRIVATE
         Visor::Core
         ${VISOR_STATIC_PLUGINS}
-        catch2::catch2_with_main)
+        Catch2::Catch2WithMain)
 
 add_test(NAME unit-tests-visor-core
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src

@@ -15,7 +15,7 @@ target_link_libraries(pktvisord
         PRIVATE
         timer
         ${ADDITIONAL_LIBS}
-        docopt::docopt
+        docopt_s
         Visor::Core
         ${VISOR_STATIC_PLUGINS}
         )

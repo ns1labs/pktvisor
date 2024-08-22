@@ -18,7 +18,7 @@ function build() {
   cp -rf /github/workspace/integration_tests/ /pktvisor-src/integration_tests/
   cp -rf /github/workspace/cmake/ /pktvisor-src/cmake/
   cp -rf /github/workspace/CMakeLists.txt /pktvisor-src/
-  cp -rf /github/workspace/conanfile.txt /pktvisor-src/
+  cp -rf /github/workspace/conanfile.py /pktvisor-src/
   mkdir /tmp/build
   cd /tmp/build
   cp -rf /pktvisor-src/build/conan_home/ .

@@ -1,6 +1,6 @@
 message(STATUS "Visor Lib Utils")
 
-find_package(pcapplusplus REQUIRED)
+find_package(PcapPlusPlus REQUIRED)
 find_package(fmt REQUIRED)
 find_package(Catch2 REQUIRED)
 
@@ -15,7 +15,7 @@ target_include_directories(VisorLibUtils
 
 target_link_libraries(VisorLibUtils
         PUBLIC
-        pcapplusplus::pcapplusplus
+        PcapPlusPlus::PcapPlusPlus
         fmt::fmt
         )
 
@@ -25,7 +25,7 @@ add_executable(unit-tests-visor-utils test_utils.cpp)
 target_link_libraries(unit-tests-visor-utils
         PRIVATE
         Visor::Lib::Utils
-        catch2::catch2_with_main)
+        Catch2::Catch2WithMain)
 
 add_test(NAME unit-tests-visor-utils
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/libs

@@ -595,7 +595,7 @@ pktvisor is developed and tested on Linux and OSX. A Windows port is in progress
 * CMake >= 3.13 (`cmake`)
 * C++ compiler supporting C++17
 
-For the list of packages included by conan, see [conanfile.txt](conanfile.txt)
+For the list of packages included by conan, see [conanfile.py](conanfile.py)
 
 #### Building
 

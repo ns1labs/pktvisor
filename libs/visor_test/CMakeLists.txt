@@ -13,7 +13,7 @@ target_include_directories(VisorLibTest
 target_link_libraries(VisorLibTest
     INTERFACE
     spdlog::spdlog
-    catch2::catch2_with_main)
+    Catch2::Catch2WithMain)
 
 target_compile_features(VisorLibTest INTERFACE cxx_std_17)
 

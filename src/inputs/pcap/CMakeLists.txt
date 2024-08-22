@@ -32,7 +32,7 @@ find_package(Catch2 REQUIRED)
 
 target_link_libraries(unit-tests-input-pcap
         PRIVATE Visor::Input::Pcap
-        catch2::catch2_with_main)
+        Catch2::Catch2WithMain)
 
 add_test(NAME unit-tests-input-pcap
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src

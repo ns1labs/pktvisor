@@ -29,7 +29,7 @@ find_package(Catch2 REQUIRED)
 target_link_libraries(unit-tests-input-mock
         PRIVATE
         Visor::Input::Mock
-        catch2::catch2_with_main)
+        Catch2::Catch2WithMain)
 
 add_test(NAME unit-tests-input-mock
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src

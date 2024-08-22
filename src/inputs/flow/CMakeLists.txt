@@ -14,7 +14,7 @@ target_include_directories(VisorInputFlow
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         )
 
-find_package(pcapplusplus REQUIRED)
+find_package(PcapPlusPlus REQUIRED)
 find_package(uvw REQUIRED)
 
 target_link_libraries(VisorInputFlow
@@ -22,7 +22,7 @@ target_link_libraries(VisorInputFlow
         netflow
         sflow
         Visor::Core
-        pcapplusplus::pcapplusplus
+        PcapPlusPlus::PcapPlusPlus
         uvw::uvw
         )
 

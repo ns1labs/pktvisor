@@ -1,6 +1,6 @@
 message(STATUS "Visor Lib TCP Helper")
 
-find_package(pcapplusplus REQUIRED)
+find_package(PcapPlusPlus REQUIRED)
 
 add_library(VisorLibTcp VisorTcpLayer.cpp)
 
@@ -13,5 +13,5 @@ target_include_directories(VisorLibTcp
 
 target_link_libraries(VisorLibTcp
         PUBLIC
-        pcapplusplus::pcapplusplus
+        PcapPlusPlus::PcapPlusPlus
         )

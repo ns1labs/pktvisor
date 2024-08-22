@@ -51,7 +51,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{github.workspace}}/build/conan_home/
-          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
+          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-
 
       - name: Configure CMake
@@ -112,7 +112,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{github.workspace}}/build/conan_home/
-          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
+          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-
 
       - name: Configure CMake
@@ -170,16 +170,11 @@ jobs:
         with:
           version: 1.64.1
 
-      - name: Remove libpcap from conanfile
-        shell: bash
-        run: |
-          sed -i -e "s/libpcap.*//g" "${{github.workspace}}\conanfile.txt"
-
       - name: Setup Conan Cache
         uses: actions/cache@v4
         with:
           path: ${{github.workspace}}/build/conan_home/
-          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
+          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-
 
       - name: Configure CMake
@@ -292,7 +287,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{github.workspace}}/build/conan_home/
-          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
+          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-
 
       - name: Build pktvisord + push symbol to bugsplat.com
@@ -832,7 +827,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{github.workspace}}/build/conan_home/
-          key: conan-${{ runner.os }}-arm64-${{ hashFiles('conanfile.txt', '*/conanfile.txt') }}
+          key: conan-${{ runner.os }}-arm64-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-arm64-
 
       - name: Build pktvisord + push symbol to bugsplat.com
