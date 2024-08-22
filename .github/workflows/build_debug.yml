@@ -33,7 +33,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.64.1
+          version: 2.6.0
 
       - name: Setup Conan Cache
         uses: actions/cache@v4
@@ -55,7 +55,7 @@ jobs:
         # Note the current convention is to use the -S and -B options here to specify source
         # and build directories, but this is only available with CMake 3.13 and higher.
         # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-        run: PKG_CONFIG_PATH=${{github.workspace}}/local/lib/pkgconfig cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON
+        run: PKG_CONFIG_PATH=${{github.workspace}}/local/lib/pkgconfig cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake -DCODE_COVERAGE=ON
 
       - name: Get VERSION
         id: build

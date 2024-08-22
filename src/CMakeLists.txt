@@ -7,15 +7,19 @@ find_package(Protobuf REQUIRED)
 find_package(fmt REQUIRED)
 find_package(httplib REQUIRED)
 find_package(maxminddb REQUIRED)
+find_package(nlohmann_json REQUIRED)
 find_package(fast-cpp-csv-parser REQUIRED)
 find_package(OpenSSL REQUIRED)
+find_package(PalSigslot REQUIRED)
+find_package(robin_hood REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(Catch2 REQUIRED)
 
 #generate cpp code from opentelemetry-proto
-find_program(PROTOBUF_PROTOC_EXECUTABLE NAMES protoc PATHS ${CONAN_BIN_DIRS_PROTOBUF})
-set(OTELCPP_PROTO_PATH ${CONAN_OPENTELEMETRY-PROTO_ROOT}/res)
+find_package(opentelemetry-proto REQUIRED CONFIG)
+string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
+set(OTELCPP_PROTO_PATH ${opentelemetry-proto_RES_DIRS_${BUILD_TYPE}})
 set(BUILD_SHARED_LIBS FALSE)
 include(opentelemetry-tools)
 include(opentelemetry-proto)
@@ -54,7 +58,11 @@ target_link_libraries(visor-core
         Corrade::Corrade
         spdlog::spdlog
         fmt::fmt
+        httplib::httplib
+        nlohmann_json::nlohmann_json
         fast-cpp-csv-parser::fast-cpp-csv-parser
+        Pal::Sigslot
+        robin_hood::robin_hood
         yaml-cpp::yaml-cpp
         OpenSSL::SSL
         ${VISOR_STATIC_PLUGINS}

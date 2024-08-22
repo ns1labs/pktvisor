@@ -1,4 +1,5 @@
 from conan import ConanFile
+from conan.tools.cmake import cmake_layout
 
 
 class Pktvisor(ConanFile):
@@ -19,7 +20,6 @@ class Pktvisor(ConanFile):
             self.requires("libpcap/1.10.4", force=True)
         self.requires("opentelemetry-proto/1.3.0")
         self.requires("pcapplusplus/23.09")
-        self.requires("abseil/20240116.2", force=True)
         self.requires("protobuf/5.27.0")
         self.requires("sigslot/1.2.2")
         self.requires("spdlog/1.14.1")
@@ -32,3 +32,6 @@ class Pktvisor(ConanFile):
     def build_requirements(self):
         self.tool_requires("corrade/2020.06")
         self.tool_requires("protobuf/5.27.0")
+
+    def layout(self):
+        cmake_layout(self)

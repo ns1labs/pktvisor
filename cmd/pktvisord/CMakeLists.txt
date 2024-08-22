@@ -7,7 +7,7 @@ if(NOT WIN32)
 endif()
 
 if(NOT CRASHPAD_NOT_SUPPORTED)
-    find_package(crashpad REQUIRED)
+    find_package(crashpad REQUIRED CONFIG)
     set(ADDITIONAL_LIBS ${ADDITIONAL_LIBS} crashpad::handler)
 endif()
 
@@ -22,6 +22,7 @@ target_link_libraries(pktvisord
 
 #copy conan crashpad built binary to binaries folder
 if(NOT CRASHPAD_NOT_SUPPORTED)
+    set(CONAN_BIN_DIRS_CRASHPAD ${crashpad_INCLUDE_DIR}/../bin)
     if(WIN32)
         configure_file("${CONAN_BIN_DIRS_CRASHPAD}/crashpad_handler.exe" "${PROJECT_BINARY_DIR}/bin/crashpad_handler.exe" COPYONLY)
     else()

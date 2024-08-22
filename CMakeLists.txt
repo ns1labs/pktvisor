@@ -59,41 +59,11 @@ if(NOT MSVC)
     add_compile_options(-Wall -pedantic -W -Wextra -Wno-unknown-pragmas)
 endif()
 
-# Conan setup
-
-include(conan)
-conan_cmake_autodetect(CONAN_SETTINGS)
-message(STATUS "Detected conan settings: ${CONAN_SETTINGS}")
-
-set(PKTVISOR_CONAN_INIT ON CACHE BOOL "Create new Conan environment for the build.")
-set(PKTVISOR_CONAN_BUILD "missing" CACHE STRING "Specify conan packages to build from source. Values are separated by semicolon.")
-set(PKTVISOR_CONAN_BUILD_PROFILE "" CACHE STRING "Profile for the build environment.")
-set(PKTVISOR_CONAN_HOST_PROFILE "" CACHE STRING "Profile for the host environment.")
-
-if(PKTVISOR_CONAN_INIT)
-    message(STATUS "Using new Conan environment")
-    set(ENV{CONAN_USER_HOME} ${CMAKE_BINARY_DIR}/conan_home)
-    set(ENV{CONAN_REVISIONS_ENABLED} 1)
-endif()
-
 if(WIN32)
     set(CUSTOM_CMAKE_OPTIONS docopt.cpp:boost_regex=True)
 endif()
 
-conan_cmake_install(
-        PATH_OR_REFERENCE ${PROJECT_SOURCE_DIR}
-        BUILD ${PKTVISOR_CONAN_BUILD}
-        PROFILE_BUILD ${PKTVISOR_CONAN_BUILD_PROFILE}
-        PROFILE_HOST ${PKTVISOR_CONAN_HOST_PROFILE}
-        GENERATOR cmake
-        SETTINGS ${CONAN_SETTINGS}
-        OPTIONS ${CUSTOM_CMAKE_OPTIONS}
-        INSTALL_FOLDER ${CMAKE_BINARY_DIR})
-
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
-
-find_package(Corrade REQUIRED PluginManager)
+find_package(Corrade REQUIRED)
 include(sanitizer)
 if(CODE_COVERAGE)
     include(CodeCoverage)

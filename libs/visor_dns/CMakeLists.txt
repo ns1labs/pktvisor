@@ -2,6 +2,7 @@ message(STATUS "Visor Lib DNS Helper")
 
 find_package(PcapPlusPlus REQUIRED)
 find_package(Catch2 REQUIRED)
+find_package(fmt REQUIRED)
 
 add_library(VisorLibDns
         dns.cpp
@@ -20,6 +21,7 @@ target_link_libraries(VisorLibDns
         PUBLIC
         Visor::Lib::Tcp
         PcapPlusPlus::PcapPlusPlus
+        fmt::fmt
         )
 
 ## TEST SUITE

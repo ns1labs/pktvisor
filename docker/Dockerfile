@@ -6,7 +6,7 @@ RUN \
     apt-get update && \
     apt-get upgrade --yes --force-yes && \
     apt-get install --yes --force-yes --no-install-recommends ${BUILD_DEPS} && \
-    pip3 install "conan==1.64.1"
+    pip3 install "conan==2.6.0"
 
 # need git for current hash for VERSION
 COPY ./.git/ /pktvisor-src/.git/
@@ -29,7 +29,7 @@ RUN \
     conan config set general.revisions_enabled=1
 
 RUN \
-    PKG_CONFIG_PATH=/local/lib/pkgconfig cmake -DCMAKE_BUILD_TYPE=Release /pktvisor-src && \
+    PKG_CONFIG_PATH=/local/lib/pkgconfig cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake /pktvisor-src && \
     make all -j 4
 
 FROM golang:latest AS gobuild
