@@ -2,6 +2,9 @@
 name: "CodeQL"
 
 on:
+  pull_request:
+    branches:
+      - develop
   schedule:
   #run 5 minutes after midnight daily
     - cron: '5 0 * * *'
@@ -104,6 +107,8 @@ jobs:
         cmake -DCMAKE_BUILD_TYPE=Release ..
         # build and run tests
         make all test
+        # remove conan cache
+        rm -rf conan_home/
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
