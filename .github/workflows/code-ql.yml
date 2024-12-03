@@ -2,6 +2,9 @@
 name: "CodeQL"
 
 on:
+  pull_request:
+    branches:
+      - develop
   schedule:
   #run 5 minutes after midnight daily
     - cron: '5 0 * * *'
@@ -53,8 +56,8 @@ jobs:
         
         # Details on CodeQL's query packs refer to : https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
         # queries: security-extended,security-and-quality
-        queries: ns1/NS1QLPacks/codeql/cpp/NS1-security.qls@main
-        config-file: ns1/NS1QLPacks/codeql/NS1-codeql-config.yml@main
+        queries: ./.github/codeql/security.qls
+        config-file: ./.github/codeql/config.yml
         
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
@@ -104,8 +107,6 @@ jobs:
         cmake -DCMAKE_BUILD_TYPE=Release ..
         # build and run tests
         make all test
-        # remove conan cache
-        rm -rf conan_home/
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3

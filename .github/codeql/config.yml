@@ -1,0 +1,6 @@
+name: "CodeQL code scanning custom configuration"
+
+disable-default-queries: true
+
+paths-ignore:
+  - build/conan_home
