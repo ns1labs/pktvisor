@@ -32,8 +32,6 @@ jobs:
         # uses: turtlebrowser/get-conan@4dc7e6dd45c8b1e02e909979d7cfc5ebba6ddbe2
         id: conan
         uses: turtlebrowser/get-conan@main
-        with:
-          version: 2.6.0
 
       - name: Setup Conan Cache
         uses: actions/cache@v4

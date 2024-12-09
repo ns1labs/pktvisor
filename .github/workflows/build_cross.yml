@@ -68,7 +68,7 @@ jobs:
           curl -L "${{matrix.toolchain}}" | tar -C toolchain -xz --strip-components=1
 
       - name: Install Conan
-        run: pip install --no-cache-dir 'conan==2.6.0' --force-reinstall
+        run: pip install --no-cache-dir conan --force-reinstall
 
       - name: Create Conan host profile
         run: |
