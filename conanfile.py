@@ -1,5 +1,5 @@
 from conan import ConanFile
-from conan.tools.cmake import cmake_layout
+from conan.tools.cmake import CMake, CMakeToolchain, cmake_layout
 
 
 class Pktvisor(ConanFile):
@@ -32,6 +32,7 @@ class Pktvisor(ConanFile):
     def build_requirements(self):
         self.tool_requires("corrade/2020.06")
         self.tool_requires("protobuf/5.27.0")
+        self.tool_requires("ninja/1.12.1")
 
     def layout(self):
         cmake_layout(self)
