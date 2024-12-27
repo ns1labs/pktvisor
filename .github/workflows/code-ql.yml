@@ -23,8 +23,8 @@ jobs:
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
 
     env:
-      CC: gcc-10
-      CXX: g++-10
+      CC: gcc
+      CXX: g++
       CONAN_USER_HOME: "${{github.workspace}}"
 
     steps:

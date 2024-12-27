@@ -6,7 +6,7 @@ RUN \
     apt-get update && \
     apt-get upgrade --yes --force-yes && \
     apt-get install --yes --force-yes --no-install-recommends ${BUILD_DEPS} && \
-    pip3 install "conan==1.64.1"
+    pip3 install "conan==1.66.0"
 
 # need git for current hash for VERSION
 COPY ./.git/ /pktvisor-src/.git/
