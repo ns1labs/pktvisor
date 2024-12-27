@@ -69,7 +69,7 @@ jobs:
           curl -L "${{matrix.toolchain}}" | tar -C toolchain -xz --strip-components=1
 
       - name: Install Conan
-        run: pip install --no-cache-dir 'conan==1.64.1' --force-reinstall
+        run: pip install --no-cache-dir 'conan==1.66.0' --force-reinstall
 
       - name: Create Conan configuration
         run: |

@@ -42,7 +42,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.64.1
+          version: 1.66.0
 
       - name: Setup OSX Environment
         run: echo "SDKROOT=$(xcrun --sdk macosx --show-sdk-path)" >> $GITHUB_ENV
@@ -101,7 +101,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.64.1
+          version: 1.66.0
 
       - name: linux package install
         run: |
@@ -168,7 +168,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.64.1
+          version: 1.66.0
 
       - name: Setup Conan Cache
         uses: actions/cache@v4
@@ -393,7 +393,7 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
-          version: 1.64.1
+          version: 1.66.0
 
       - name: Configure CMake to generate VERSION
         shell: bash

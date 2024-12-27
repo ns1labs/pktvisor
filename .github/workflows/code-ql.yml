@@ -69,7 +69,7 @@ jobs:
     - run: |
         # Run Build - set up dependencies, env vars, compile, and make test
         #install conan
-        pip install --no-cache-dir 'conan==1.64.1' --force-reinstall
+        pip install --no-cache-dir 'conan==1.66.0' --force-reinstall
         # create conan config
         CONAN_V2_MODE=1 conan config init
         conan config set general.revisions_enabled=1
