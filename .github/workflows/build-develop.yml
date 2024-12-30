@@ -467,18 +467,6 @@ jobs:
         with:
           name: pktvisor-x86_64-${{ env.VERSION }}.AppImage
           path: ${{github.workspace}}/appimage/pktvisor-x86_64-${{ env.VERSION }}.AppImage
-    
-  build-orb-agent:
-    needs: [ package-amd64, unit-tests-mac ]
-    runs-on: ubuntu-latest
-    steps:
-    - name: Repository Dispatch
-      uses: peter-evans/repository-dispatch@v2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        repository: orb-community/orb
-        event-type: build-agent
-        client-payload: '{"branch_name": "develop"}'
 
   package-arm64:
     needs: [ unit-tests-linux ]
