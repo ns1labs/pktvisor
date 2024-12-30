@@ -27,7 +27,7 @@ class Pktvisor(ConanFile):
         self.requires("yaml-cpp/0.8.0")
         self.requires("robin-hood-hashing/3.11.5")
         self.requires("libcurl/8.9.1")
-        self.requires("crashpad/cci.20220219")
+        self.requires("sentry-crashpad/0.6.5")
 
     def build_requirements(self):
         self.tool_requires("corrade/2020.06")
