@@ -60,7 +60,7 @@ jobs:
       - name: Test
         working-directory: ${{github.workspace}}/build
         shell: bash
-        run: ctest -C $BUILD_TYPE
+        run: sudo ctest -C $BUILD_TYPE
 
   prebuild-package:
     needs: [ unit-tests ]

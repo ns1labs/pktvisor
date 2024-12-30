@@ -75,7 +75,7 @@ jobs:
         shell: bash
         # Execute tests defined by the CMake configuration.
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-        run: ctest -C $BUILD_TYPE
+        run: sudo ctest -C $BUILD_TYPE
         
   unit-tests-linux:
     # The CMake configure and build commands are platform agnostic and should work equally
