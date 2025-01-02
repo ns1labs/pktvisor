@@ -120,8 +120,7 @@ jobs:
       uses: advanced-security/filter-sarif@v1
       with:
         patterns: |
-          +**/*.cpp
-          -build/**/*
+          -pktvisor/build/**/*
         input: sarif-results/cpp.sarif
         output: sarif-results/cpp.sarif
 
