@@ -30,7 +30,7 @@ jobs:
 
       - name: Get Conan
         id: conan
-        uses: turtlebrowser/get-conan@main
+        uses: turtlebrowser/get-conan@c171f295f3f507360ee018736a6608731aa2109d #v1.2
         with:
           version: 1.66.0
 
@@ -82,7 +82,7 @@ jobs:
 
       - name: Get Conan
         id: conan
-        uses: turtlebrowser/get-conan@main
+        uses: turtlebrowser/get-conan@c171f295f3f507360ee018736a6608731aa2109d #v1.2
         with:
           version: 1.66.0
 
@@ -132,7 +132,7 @@ jobs:
 
       - name: Get Conan
         id: conan
-        uses: turtlebrowser/get-conan@main
+        uses: turtlebrowser/get-conan@c171f295f3f507360ee018736a6608731aa2109d #v1.2
         with:
           version: 1.66.0
 
@@ -188,10 +188,8 @@ jobs:
         run: cmake -E make_directory ${{github.workspace}}\build
 
       - name: Get Conan
-        # You may pin to the exact commit or the version.
-        # uses: turtlebrowser/get-conan@4dc7e6dd45c8b1e02e909979d7cfc5ebba6ddbe2
         id: conan
-        uses: turtlebrowser/get-conan@main
+        uses: turtlebrowser/get-conan@c171f295f3f507360ee018736a6608731aa2109d #v1.2
         with:
           version: 1.66.0
 
@@ -299,7 +297,7 @@ jobs:
 
   package-arm64:
     needs: [ prebuild-package ]
-    runs-on: ${{ needs.spinup-arm64-runner.outputs.runner_label }}
+    runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
     steps:
       - name: Attach to workspace
@@ -372,18 +370,18 @@ jobs:
         run: echo ${{ env.REF_TAG }}
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf #v3.2.0
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@6524bf65af31da8d45b59e8c27de4bd072b392f5 #v3.8.0
 
       - name: Replace token
         run: |
@@ -399,7 +397,7 @@ jobs:
         id: docker_build
         env:
           IMAGE_NAME: ghcr.io/orb-community/pktvisor
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 #v6.10.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
@@ -493,7 +491,7 @@ jobs:
         run: echo ${{ env.REF_TAG }}
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -501,10 +499,10 @@ jobs:
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@6524bf65af31da8d45b59e8c27de4bd072b392f5 #v3.8.0
         
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf #v3.2.0
         
       - name: Replace token
         run: |
@@ -519,7 +517,7 @@ jobs:
       - name: Build + push - pktvisor (multi-arch)
         env:
           IMAGE_NAME: ghcr.io/orb-community/pktvisor
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 #v6.10.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
@@ -543,7 +541,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}

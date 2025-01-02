@@ -102,7 +102,7 @@ jobs:
         # configure and handle dependencies
         cmake -DCMAKE_BUILD_TYPE=Release ..
         # build and run tests
-        make all test
+        sudo make all test
         #remove conan files
         rm -rf conan_home/
 
