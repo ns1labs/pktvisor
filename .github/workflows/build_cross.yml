@@ -36,8 +36,9 @@ jobs:
             cc: aarch64-linux-musl-gcc
             cxx: aarch64-linux-musl-g++
     env:
-      CC: gcc-10
-      CXX: g++-10
+      CC: gcc
+      CXX: g++
+ 
     steps:
       - name: Install sccache from cache
         id: cache-sccache

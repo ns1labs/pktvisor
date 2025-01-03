@@ -23,8 +23,8 @@ jobs:
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
 
     env:
-      CC: gcc-10
-      CXX: g++-10
+      CC: gcc
+      CXX: g++
       CONAN_USER_HOME: "${{github.workspace}}"
 
     steps:
@@ -39,7 +39,6 @@ jobs:
         sudo rm -rf /usr/local/lib/android
         sudo rm -rf /opt/ghc
         sudo apt clean
-        docker rmi $(docker image ls -aq)
         df -h
 
     # Initializes the CodeQL tools for scanning.
@@ -103,9 +102,33 @@ jobs:
         # configure and handle dependencies
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake ..
         # build and run tests
-        make all test
+        sudo make all test
         #remove conan files
         rm -rf conan_home/
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:cpp"
+        output: sarif-results
+        upload: failure-only
+
+    - name: filter-sarif
+      uses: advanced-security/filter-sarif@v1
+      with:
+        patterns: |
+          -pktvisor/build/conan_home/**/*
+        input: sarif-results/cpp.sarif
+        output: sarif-results/cpp.sarif
+
+    - name: Upload SARIF
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: sarif-results/cpp.sarif
+
+    - name: Upload loc as a Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: sarif-results
+        path: sarif-results
+        retention-days: 1
