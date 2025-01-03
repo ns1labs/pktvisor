@@ -84,7 +84,6 @@ jobs:
           compiler.libcxx=libstdc++11
           compiler.libc=musl
           build_type=Release
-          [build_requires]
           [env]
           CC=${{github.workspace}}/toolchain/bin/${{matrix.cc}}
           CXX=${{github.workspace}}/toolchain/bin/${{matrix.cxx}}

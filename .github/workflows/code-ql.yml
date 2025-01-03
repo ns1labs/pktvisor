@@ -89,7 +89,6 @@ jobs:
         build_type=Release
         [options]
         pcapplusplus:with_musl=True
-        [build_requires]
         [env]
         CC=${{github.workspace}}/toolchain/bin/${{matrix.cc}}
         CXX=${{github.workspace}}/toolchain/bin/${{matrix.cxx}}
