@@ -15,14 +15,7 @@ find_package(robin_hood REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(Catch2 REQUIRED)
-
-#generate cpp code from opentelemetry-proto
-find_package(opentelemetry-proto REQUIRED CONFIG)
-string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
-set(OTELCPP_PROTO_PATH ${opentelemetry-proto_RES_DIRS_${BUILD_TYPE}})
-set(BUILD_SHARED_LIBS FALSE)
-include(opentelemetry-tools)
-include(opentelemetry-proto)
+find_package(opentelemetry-cpp REQUIRED)
 
 add_library(visor-core
         AbstractModule.cpp
@@ -52,7 +45,7 @@ target_link_libraries(visor-core
         datasketches
         rng
         timer
-        opentelemetry_proto
+        opentelemetry-cpp::opentelemetry_proto
         protobuf::libprotobuf
         maxminddb::maxminddb
         Corrade::Corrade

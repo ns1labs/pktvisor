@@ -18,15 +18,16 @@ class Pktvisor(ConanFile):
         self.requires("openssl/3.3.2")
         if self.settings.os != "Windows":
             self.requires("libpcap/1.10.4", force=True)
-        self.requires("opentelemetry-proto/1.4.0")
+        self.requires("opentelemetry-cpp/1.17.0")
         self.requires("pcapplusplus/23.09")
         self.requires("protobuf/5.27.0")
         self.requires("sigslot/1.2.2")
+        self.requires("fmt/10.2.1", force=True)
         self.requires("spdlog/1.15.0")
         self.requires("uvw/3.4.0")
         self.requires("yaml-cpp/0.8.0")
         self.requires("robin-hood-hashing/3.11.5")
-        self.requires("libcurl/8.10.1")
+        self.requires("libcurl/8.11.1")
         self.requires("sentry-crashpad/0.6.5")
 
     def build_requirements(self):
