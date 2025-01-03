@@ -13,13 +13,6 @@ find_package(spdlog REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(Catch2 REQUIRED)
 
-#generate cpp code from opentelemetry-proto
-find_program(PROTOBUF_PROTOC_EXECUTABLE NAMES protoc PATHS ${CONAN_BIN_DIRS_PROTOBUF})
-set(OTELCPP_PROTO_PATH ${CONAN_OPENTELEMETRY-PROTO_ROOT}/res)
-set(BUILD_SHARED_LIBS FALSE)
-include(opentelemetry-tools)
-include(opentelemetry-proto)
-
 add_library(visor-core
         AbstractModule.cpp
         AbstractPlugin.cpp
