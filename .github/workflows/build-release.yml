@@ -293,7 +293,7 @@ jobs:
         shell: bash
         run: |
           chmod a+x ./docker/upload-gh-asset.sh
-          ./docker/upload-gh-asset.sh github_api_token=${{ secrets.BOT_TOKEN }} owner=orb-community repo=pktvisor tag=LATEST filename=./pktvisor-win64.zip
+          ./docker/upload-gh-asset.sh github_api_token=${{ secrets.BOT_TOKEN }} owner=netboxlabs repo=pktvisor tag=LATEST filename=./pktvisor-win64.zip
 
   package-arm64:
     needs: [ prebuild-package ]
@@ -343,7 +343,7 @@ jobs:
       - name: Upload arm64 binary to latest release
         run: |
           chmod a+x ./docker/upload-gh-asset.sh
-          ./docker/upload-gh-asset.sh github_api_token=${{ secrets.BOT_TOKEN }} owner=orb-community repo=pktvisor tag=LATEST filename=./pktvisor-arm64.zip  
+          ./docker/upload-gh-asset.sh github_api_token=${{ secrets.BOT_TOKEN }} owner=netboxlabs repo=pktvisor tag=LATEST filename=./pktvisor-arm64.zip  
 
       - name: Get branch name
         shell: bash
@@ -396,7 +396,7 @@ jobs:
       - name: Build + push - pktvisor (multi-arch)
         id: docker_build
         env:
-          IMAGE_NAME: ghcr.io/orb-community/pktvisor
+          IMAGE_NAME: ghcr.io/netboxlabs/pktvisor
         uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 #v6.10.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
@@ -408,7 +408,7 @@ jobs:
 
       - name: Load image
         env:
-          IMAGE_NAME: ghcr.io/orb-community/pktvisor
+          IMAGE_NAME: ghcr.io/netboxlabs/pktvisor
         run: |
           docker load --input /tmp/arm64.tar
           docker image ls -a
@@ -464,7 +464,7 @@ jobs:
       - name: Upload amd64 binary to latest release
         run: |
           chmod a+x ./docker/upload-gh-asset.sh
-          ./docker/upload-gh-asset.sh github_api_token=${{ secrets.BOT_TOKEN }} owner=orb-community repo=pktvisor tag=LATEST filename=./pktvisor-amd64.zip 
+          ./docker/upload-gh-asset.sh github_api_token=${{ secrets.BOT_TOKEN }} owner=netboxlabs repo=pktvisor tag=LATEST filename=./pktvisor-amd64.zip 
 
       - name: Get branch name
         shell: bash
@@ -516,7 +516,7 @@ jobs:
 
       - name: Build + push - pktvisor (multi-arch)
         env:
-          IMAGE_NAME: ghcr.io/orb-community/pktvisor
+          IMAGE_NAME: ghcr.io/netboxlabs/pktvisor
         uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 #v6.10.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
@@ -528,7 +528,7 @@ jobs:
 
       - name: Load image
         env:
-          IMAGE_NAME: ghcr.io/orb-community/pktvisor
+          IMAGE_NAME: ghcr.io/netboxlabs/pktvisor
         run: |
           docker load --input /tmp/amd64.tar
           docker image ls -a
@@ -549,13 +549,13 @@ jobs:
 
       - name: Create docker manifest
         run: |
-          docker manifest create ghcr.io/orb-community/pktvisor:latest \
-          ghcr.io/orb-community/pktvisor:release-amd64 \
-          ghcr.io/orb-community/pktvisor:release-arm64
+          docker manifest create ghcr.io/netboxlabs/pktvisor:latest \
+          ghcr.io/netboxlabs/pktvisor:release-amd64 \
+          ghcr.io/netboxlabs/pktvisor:release-arm64
 
       - name: Push manifest to ghcr.io
         run: |
-          docker manifest push ghcr.io/orb-community/pktvisor:latest
+          docker manifest push ghcr.io/netboxlabs/pktvisor:latest
 
       - name: Install skopeo
         run: |
@@ -574,12 +574,12 @@ jobs:
         run: |
           sudo skopeo copy \
           --all \
-          docker://ghcr.io/orb-community/pktvisor:latest \
-          docker://docker.io/orbcommunity/pktvisor:latest
+          docker://ghcr.io/netboxlabs/pktvisor:latest \
+          docker://docker.io/netboxlabs/pktvisor:latest
           
       - name: Copy release version from ghcr.io to docker.io
         run: |
           sudo skopeo copy \
           --all \
-          docker://ghcr.io/orb-community/pktvisor:latest \
-          docker://docker.io/orbcommunity/pktvisor:${{ needs.package-amd64.outputs.release_version }}
+          docker://ghcr.io/netboxlabs/pktvisor:latest \
+          docker://docker.io/netboxlabs/pktvisor:${{ needs.package-amd64.outputs.release_version }}

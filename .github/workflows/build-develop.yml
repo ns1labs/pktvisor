@@ -353,8 +353,8 @@ jobs:
 
       - name: Build + push - pktvisor (multi-arch)
         env:
-          IMAGE_NAME1: orbcommunity/pktvisor
-          IMAGE_NAME2: ghcr.io/orb-community/pktvisor
+          IMAGE_NAME1: netboxlabs/pktvisor
+          IMAGE_NAME2: ghcr.io/netboxlabs/pktvisor
         uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 #v6.10.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
@@ -366,8 +366,8 @@ jobs:
 
       - name: Load image
         env:
-          IMAGE_NAME1: orbcommunity/pktvisor
-          IMAGE_NAME2: ghcr.io/orb-community/pktvisor
+          IMAGE_NAME1: netboxlabs/pktvisor
+          IMAGE_NAME2: ghcr.io/netboxlabs/pktvisor
         run: |
           docker load --input /tmp/amd64.tar
           docker image ls -a
@@ -444,7 +444,7 @@ jobs:
 
       - name: Build + push - pktvisor-prom-write
         env:
-          IMAGE_NAME: orbcommunity/pktvisor-prom-write
+          IMAGE_NAME: netboxlabs/pktvisor-prom-write
         working-directory: ${{github.workspace}}/centralized_collection/prometheus/docker-grafana-agent
         run: |
           docker build . --file Dockerfile --build-arg PKTVISOR_TAG=${{ env.REF_TAG }} --tag ${{ env.IMAGE_NAME }}:${{ env.VERSION }} --tag ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
@@ -452,7 +452,7 @@ jobs:
 
       - name: Generate AppImage
         env:
-          IMAGE_NAME: orbcommunity/pktvisor
+          IMAGE_NAME: netboxlabs/pktvisor
         working-directory: ${{github.workspace}}/appimage
         run: |
           DEV_IMAGE="${{ env.IMAGE_NAME }}:${{ env.VERSION }}" DEV_MODE=t make pktvisor-x86_64.AppImage
@@ -541,7 +541,7 @@ jobs:
       - name: Build + push - pktvisor (multi-arch)
         id: docker_build
         env:
-          IMAGE_NAME: ghcr.io/orb-community/pktvisor
+          IMAGE_NAME: ghcr.io/netboxlabs/pktvisor
         uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 #v6.10.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
@@ -553,7 +553,7 @@ jobs:
 
       - name: Load image
         env:
-          IMAGE_NAME: ghcr.io/orb-community/pktvisor
+          IMAGE_NAME: ghcr.io/netboxlabs/pktvisor
         run: |
           docker load --input /tmp/arm64.tar
           docker image ls -a
@@ -573,13 +573,13 @@ jobs:
 
       - name: Create docker manifest
         run: |
-          docker manifest create ghcr.io/orb-community/pktvisor:latest-develop \
-          ghcr.io/orb-community/pktvisor:amd64-${{needs.unit-tests-linux.outputs.commit_hash}} \
-          ghcr.io/orb-community/pktvisor:arm64-${{needs.unit-tests-linux.outputs.commit_hash}}
+          docker manifest create ghcr.io/netboxlabs/pktvisor:latest-develop \
+          ghcr.io/netboxlabs/pktvisor:amd64-${{needs.unit-tests-linux.outputs.commit_hash}} \
+          ghcr.io/netboxlabs/pktvisor:arm64-${{needs.unit-tests-linux.outputs.commit_hash}}
 
       - name: Push manifest to ghcr.io
         run: |
-          docker manifest push ghcr.io/orb-community/pktvisor:latest-develop
+          docker manifest push ghcr.io/netboxlabs/pktvisor:latest-develop
 
       - name: Install skopeo
         run: |
@@ -598,22 +598,22 @@ jobs:
         run: |
           sudo skopeo copy \
           --all \
-          docker://ghcr.io/orb-community/pktvisor:latest-develop \
-          docker://docker.io/orbcommunity/pktvisor:latest-develop
+          docker://ghcr.io/netboxlabs/pktvisor:latest-develop \
+          docker://docker.io/netboxlabs/pktvisor:latest-develop
           sudo skopeo copy \
           --all \
-          docker://ghcr.io/orb-community/pktvisor:latest-develop \
-          docker://docker.io/orbcommunity/pktvisor:develop
+          docker://ghcr.io/netboxlabs/pktvisor:latest-develop \
+          docker://docker.io/netboxlabs/pktvisor:develop
           sudo skopeo copy \
           --all \
-          docker://ghcr.io/orb-community/pktvisor:latest-develop \
-          docker://docker.io/orbcommunity/pktvisor:${{ needs.unit-tests-linux.outputs.version_number }}
+          docker://ghcr.io/netboxlabs/pktvisor:latest-develop \
+          docker://docker.io/netboxlabs/pktvisor:${{ needs.unit-tests-linux.outputs.version_number }}
           
           
       - name: Delete arm64 images from ghcr.io
         uses: bots-house/ghcr-delete-image-action@3827559c68cb4dcdf54d813ea9853be6d468d3a4 #v1.1.0
         with:
-          owner: orb-community
+          owner: netboxlabs
           name: pktvisor
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: arm64-${{needs.unit-tests-linux.outputs.commit_hash}}
@@ -621,7 +621,7 @@ jobs:
       - name: Delete amd64 images from ghcr.io
         uses: bots-house/ghcr-delete-image-action@3827559c68cb4dcdf54d813ea9853be6d468d3a4 #v1.1.0
         with:
-          owner: orb-community
+          owner: netboxlabs
           name: pktvisor
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: amd64-${{needs.unit-tests-linux.outputs.commit_hash}}
@@ -629,7 +629,7 @@ jobs:
       - name: Delete latest-develop images from ghcr.io
         uses: bots-house/ghcr-delete-image-action@3827559c68cb4dcdf54d813ea9853be6d468d3a4 #v1.1.0
         with:
-          owner: orb-community
+          owner: netboxlabs
           name: pktvisor
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: latest-develop
