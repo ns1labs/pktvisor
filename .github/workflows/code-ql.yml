@@ -99,7 +99,7 @@ jobs:
         LDFLAGS=${{matrix.ldflags}}
         EOF
         # clone the repository, not sure if this needs to be done
-        git clone https://github.com/orb-community/pktvisor.git
+        git clone https://github.com/netboxlabs/pktvisor.git
         cd pktvisor
         mkdir build && cd build
         # configure and handle dependencies
@@ -120,7 +120,7 @@ jobs:
       uses: advanced-security/filter-sarif@v1
       with:
         patterns: |
-          -**/conan_home/**
+          -**/*
         input: sarif-results/cpp.sarif
         output: sarif-results/cpp.sarif
 
