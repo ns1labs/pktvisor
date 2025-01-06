@@ -320,19 +320,12 @@ jobs:
 
       - name: Debug ref tag
         run: echo ${{ env.REF_TAG }}
-        
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker Hub
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
         with:
-          username: ${{ secrets.ORB_DOCKERHUB_USERNAME }}
-          password: ${{ secrets.ORB_DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Replace token
         run: |
@@ -353,27 +346,24 @@ jobs:
 
       - name: Build + push - pktvisor (multi-arch)
         env:
-          IMAGE_NAME1: netboxlabs/pktvisor
-          IMAGE_NAME2: ghcr.io/netboxlabs/pktvisor
+          IMAGE_NAME: netboxlabs/pktvisor
         uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 #v6.10.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./docker/Dockerfile.crashhandler
           platforms: linux/amd64
-          tags: ${{ env.IMAGE_NAME1 }}:${{ needs.unit-tests-linux.outputs.version_number }} , ${{ env.IMAGE_NAME1 }}:${{ env.REF_TAG }} , ${{ env.IMAGE_NAME2 }}:amd64-${{needs.unit-tests-linux.outputs.commit_hash}}
+          tags: ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }} , ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
           outputs: type=docker,dest=/tmp/amd64.tar
 
       - name: Load image
         env:
-          IMAGE_NAME1: netboxlabs/pktvisor
-          IMAGE_NAME2: ghcr.io/netboxlabs/pktvisor
+          IMAGE_NAME: netboxlabs/pktvisor
         run: |
           docker load --input /tmp/amd64.tar
           docker image ls -a
-          docker push ${{ env.IMAGE_NAME2 }}:amd64-${{needs.unit-tests-linux.outputs.commit_hash}}
-          docker push ${{ env.IMAGE_NAME1 }}:${{ env.REF_TAG }}
-          docker push ${{ env.IMAGE_NAME1 }}:${{ needs.unit-tests-linux.outputs.version_number }}
+          docker push ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
+          docker push ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }}
 
   build-app-image-x64:
     needs: [ package-amd64 ]
@@ -439,8 +429,8 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
         with:
-          username: ${{ secrets.ORB_DOCKERHUB_USERNAME }}
-          password: ${{ secrets.ORB_DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build + push - pktvisor-prom-write
         env:
@@ -514,12 +504,11 @@ jobs:
           echo "PRERELEASE=false" >> $GITHUB_ENV
           echo "DRAFT=true" >> $GITHUB_ENV
 
-      - name: Login to GitHub Container Registry
+      - name: Login to Docker Hub
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf #v3.2.0
@@ -541,95 +530,21 @@ jobs:
       - name: Build + push - pktvisor (multi-arch)
         id: docker_build
         env:
-          IMAGE_NAME: ghcr.io/netboxlabs/pktvisor
+          IMAGE_NAME: netboxlabs/pktvisor
         uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 #v6.10.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./docker/Dockerfile.crashhandler
           platforms: linux/arm64
-          tags: ${{ env.IMAGE_NAME }}:arm64-${{needs.unit-tests-linux.outputs.commit_hash}}
+          tags: ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }} , ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
           outputs: type=docker,dest=/tmp/arm64.tar
 
       - name: Load image
         env:
-          IMAGE_NAME: ghcr.io/netboxlabs/pktvisor
+          IMAGE_NAME: netboxlabs/pktvisor
         run: |
           docker load --input /tmp/arm64.tar
           docker image ls -a
-          docker push ${{ env.IMAGE_NAME }}:arm64-${{needs.unit-tests-linux.outputs.commit_hash}}     
-            
-  pushing-manifests:
-    needs: [ unit-tests-linux, package-amd64, package-arm64 ]
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-    steps:    
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create docker manifest
-        run: |
-          docker manifest create ghcr.io/netboxlabs/pktvisor:latest-develop \
-          ghcr.io/netboxlabs/pktvisor:amd64-${{needs.unit-tests-linux.outputs.commit_hash}} \
-          ghcr.io/netboxlabs/pktvisor:arm64-${{needs.unit-tests-linux.outputs.commit_hash}}
-
-      - name: Push manifest to ghcr.io
-        run: |
-          docker manifest push ghcr.io/netboxlabs/pktvisor:latest-develop
-
-      - name: Install skopeo
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y skopeo
-          
-      - name: Login skopeo to ghcr
-        run: |
-          sudo skopeo login -u ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
-
-      - name: Login skopeo to dockerhub
-        run: |
-          sudo skopeo login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} docker.io
-
-      - name: Copy from ghcr.io to docker.io
-        run: |
-          sudo skopeo copy \
-          --all \
-          docker://ghcr.io/netboxlabs/pktvisor:latest-develop \
-          docker://docker.io/netboxlabs/pktvisor:latest-develop
-          sudo skopeo copy \
-          --all \
-          docker://ghcr.io/netboxlabs/pktvisor:latest-develop \
-          docker://docker.io/netboxlabs/pktvisor:develop
-          sudo skopeo copy \
-          --all \
-          docker://ghcr.io/netboxlabs/pktvisor:latest-develop \
-          docker://docker.io/netboxlabs/pktvisor:${{ needs.unit-tests-linux.outputs.version_number }}
-          
-          
-      - name: Delete arm64 images from ghcr.io
-        uses: bots-house/ghcr-delete-image-action@3827559c68cb4dcdf54d813ea9853be6d468d3a4 #v1.1.0
-        with:
-          owner: netboxlabs
-          name: pktvisor
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: arm64-${{needs.unit-tests-linux.outputs.commit_hash}}
-          
-      - name: Delete amd64 images from ghcr.io
-        uses: bots-house/ghcr-delete-image-action@3827559c68cb4dcdf54d813ea9853be6d468d3a4 #v1.1.0
-        with:
-          owner: netboxlabs
-          name: pktvisor
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: amd64-${{needs.unit-tests-linux.outputs.commit_hash}}
-          
-      - name: Delete latest-develop images from ghcr.io
-        uses: bots-house/ghcr-delete-image-action@3827559c68cb4dcdf54d813ea9853be6d468d3a4 #v1.1.0
-        with:
-          owner: netboxlabs
-          name: pktvisor
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: latest-develop
+          docker push ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
+          docker push ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }}
