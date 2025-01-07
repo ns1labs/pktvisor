@@ -270,7 +270,7 @@ jobs:
     needs: [ unit-tests-linux ]
     runs-on: ubuntu-latest
     # if this is a push into one of our main branches (rather than just a pull request), we will also package
-    if: github.event_name != 'pull_request'
+    #if: github.event_name != 'pull_request'
     outputs:
       version_number: ${{ env.VERSION }}
     steps:
@@ -352,18 +352,12 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./docker/Dockerfile.crashhandler
+          push: true
           platforms: linux/amd64
-          tags: ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }} , ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
-          outputs: type=docker,dest=/tmp/amd64.tar
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }}
+            ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
 
-      - name: Load image
-        env:
-          IMAGE_NAME: netboxlabs/pktvisor
-        run: |
-          docker load --input /tmp/amd64.tar
-          docker image ls -a
-          docker push ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
-          docker push ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }}
 
   build-app-image-x64:
     needs: [ package-amd64 ]
@@ -457,7 +451,7 @@ jobs:
   package-arm64:
     needs: [ unit-tests-linux ]
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
+    #if: github.event_name != 'pull_request'
     steps:
       - name: cleanup #https://github.com/actions/checkout/issues/211
         run: |
@@ -538,15 +532,8 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./docker/Dockerfile.crashhandler
+          push: true
           platforms: linux/arm64
-          tags: ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }} , ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
-          outputs: type=docker,dest=/tmp/arm64.tar
-
-      - name: Load image
-        env:
-          IMAGE_NAME: netboxlabs/pktvisor
-        run: |
-          docker load --input /tmp/arm64.tar
-          docker image ls -a
-          docker push ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
-          docker push ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }}
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }}
+            ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
