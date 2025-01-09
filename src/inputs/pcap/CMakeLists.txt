@@ -23,6 +23,9 @@ target_include_directories(VisorInputPcap
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         )
 
+message(STATUS "NPCAP_INCLUDE_DIRS: ${NPCAP_INCLUDE_DIRS}")
+message(STATUS "ADDITIONAL_LIBS: ${ADDITIONAL_LIBS}")
+
 target_link_libraries(VisorInputPcap
         PUBLIC
         ${ADDITIONAL_LIBS}
