@@ -2,6 +2,14 @@ message(STATUS "Input Module: Pcap")
 
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
+if (WIN32)
+    find_package(npcap REQUIRED CONFIG)
+    set(ADDITIONAL_LIBS npcap::npcap)
+else()
+    find_package(libpcap REQUIRED CONFIG)
+    set(ADDITIONAL_LIBS libpcap::libpcap)
+endif()
+
 corrade_add_static_plugin(VisorInputPcap ${CMAKE_CURRENT_BINARY_DIR}
         PcapInput.conf
         PcapInputModulePlugin.cpp
@@ -19,6 +27,7 @@ target_link_libraries(VisorInputPcap
         PUBLIC
         Visor::Core
         Visor::Lib::Utils
+        ${ADDITIONAL_LIBS}
         )
 
 set(VISOR_STATIC_PLUGINS ${VISOR_STATIC_PLUGINS} Visor::Input::Pcap PARENT_SCOPE)
