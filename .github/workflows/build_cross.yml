@@ -88,6 +88,7 @@ jobs:
       - name: Create Conan configuration
         working-directory: ${{github.workspace}}/src
         run: |
+          mkdir build/
           conan config list
           python3 -c 'import yaml; p = "build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
           conan profile detect
@@ -131,7 +132,7 @@ jobs:
 
       - name: Build
         working-directory: ${{github.workspace}}/src/build
-        run: cmake --build . --config Release -- -j 4
+        run: make -j4 VERBOSE=1
 
       - name: Print sccache stats
         run: |
