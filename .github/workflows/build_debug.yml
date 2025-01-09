@@ -11,11 +11,6 @@ env:
 
 jobs:
   code-coverage:
-    # The CMake configure and build commands are platform agnostic and should work equally
-    # well on Windows or Mac.  You can convert this to a matrix build if you need
-    # cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-
     runs-on: ubuntu-latest
     outputs:
       version_number: ${{ steps.build.outputs.version }}
@@ -23,8 +18,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Create Build Environment
-        # Some projects don't allow in-source building, so create a separate build directory
-        # We'll use this as our working directory for all subsequent commands
         run: cmake -E make_directory ${{github.workspace}}/build
 
       - name: Get Conan
@@ -44,38 +37,28 @@ jobs:
           sudo apt-get install --yes --no-install-recommends jq lcov
 
       - name: Configure CMake
-        # Use a bash shell so we can use the same syntax for environment variable
-        # access regardless of the host operating system
         shell: bash
         working-directory: ${{github.workspace}}/build
-        # Note the current convention is to use the -S and -B options here to specify source
-        # and build directories, but this is only available with CMake 3.13 and higher.
-        # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
         run: PKG_CONFIG_PATH=${{github.workspace}}/local/lib/pkgconfig cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake -DCODE_COVERAGE=ON
 
       - name: Get VERSION
         id: build
-        run: |
-          echo "VERSION=`cat ${{github.workspace}}/build/VERSION`" >> $GITHUB_ENV
-          echo "::set-output name=version::$(cat ${{github.workspace}}/build/VERSION)"
+        run: echo "VERSION=`cat ${{github.workspace}}/build/VERSION`" >> $GITHUB_ENV
 
       - name: Build
         working-directory: ${{github.workspace}}/build
         shell: bash
-        # Execute the build.  You can specify a specific target with "--target <NAME>"
-        run: cmake --build . --config Debug -- -j 2
+        run: cmake --build . --config Debug -- -j 4
 
       - name: Test
         working-directory: ${{github.workspace}}/build
         shell: bash
-        # Execute tests defined by the CMake configuration.
-        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: sudo ctest
         
       - name: Build Coverage
         working-directory: ${{github.workspace}}/build
         shell: bash
-        run: sudo cmake --build . --target coverage -- -j 2
+        run: sudo cmake --build . --target coverage -- -j 4
 
       - name: Codecov
         uses: codecov/codecov-action@v3
@@ -144,26 +127,22 @@ jobs:
         run: echo ${{ env.BRANCH_NAME }}
 
       - name: Get VERSION
-        run: |
-          echo "VERSION=`cat ${{github.workspace}}/build/VERSION`" >> $GITHUB_ENV
+        run: echo "VERSION=`cat ${{github.workspace}}/build/VERSION`" >> $GITHUB_ENV
 
       - name: Debug version
         run: echo ${{ env.VERSION }}
 
       - name: Generate ref tag (master)
         if: ${{ env.BRANCH_NAME == 'master' }}
-        run: |
-          echo "REF_TAG=latest-debug" >> $GITHUB_ENV
+        run: echo "REF_TAG=latest-debug" >> $GITHUB_ENV
 
       - name: Generate ref tag (develop)
         if: ${{ env.BRANCH_NAME == 'develop' }}
-        run: |
-          echo "REF_TAG=latest-develop-debug" >> $GITHUB_ENV
+        run: echo "REF_TAG=latest-develop-debug" >> $GITHUB_ENV
 
       - name: Generate ref tag (release candidate)
         if: ${{ env.BRANCH_NAME == 'release' }}
-        run: |
-          echo "REF_TAG=latest-rc-debug" >> $GITHUB_ENV
+        run: echo "REF_TAG=latest-rc-debug" >> $GITHUB_ENV
 
       - name: Debug ref tag
         run: echo ${{ env.REF_TAG }}
@@ -186,7 +165,7 @@ jobs:
 
       - name: Build, push debug image + crashhandler
         env:
-          IMAGE_NAME: orbcommunity/pktvisor
+          IMAGE_NAME: netboxlabs/pktvisor
         run: |
           docker build . --file docker/Dockerfile.crashhandler --tag ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
           docker push -a ${{ env.IMAGE_NAME }}

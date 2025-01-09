@@ -19,18 +19,11 @@ env:
 
 jobs:
   unit-tests-mac:
-    # The CMake configure and build commands are platform agnostic and should work equally
-    # well on Windows or Mac. You can convert this to a matrix build if you need
-    # cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Create Build Environment
-        # Some projects don't allow in-source building, so create a separate build directory
-        # We'll use this as our working directory for all subsequent commands
         run: cmake -E make_directory ${{github.workspace}}/build
 
       - name: Python Setup
@@ -53,34 +46,21 @@ jobs:
           restore-keys: conan-${{ runner.os }}-
 
       - name: Configure CMake
-        # Use a bash shell so we can use the same syntax for environment variable
-        # access regardless of the host operating system
         shell: bash
         working-directory: ${{github.workspace}}/build
-        # Note the current convention is to use the -S and -B options here to specify source
-        # and build directories, but this is only available with CMake 3.13 and higher.
-        # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
         run: PKG_CONFIG_PATH=${{github.workspace}}/local/lib/pkgconfig cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake
 
       - name: Build
         working-directory: ${{github.workspace}}/build
         shell: bash
-        # Execute the build.  You can specify a specific target with "--target <NAME>"
-        run: cmake --build . --config $BUILD_TYPE -- -j 2
+        run: cmake --build . --config $BUILD_TYPE -- -j 4
 
       - name: Test
         working-directory: ${{github.workspace}}/build
         shell: bash
-        # Execute tests defined by the CMake configuration.
-        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: ctest -C $BUILD_TYPE
         
   unit-tests-linux:
-    # The CMake configure and build commands are platform agnostic and should work equally
-    # well on Windows or Mac.  You can convert this to a matrix build if you need
-    # cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-
     runs-on: ubuntu-latest
     outputs:
       version_number: ${{ env.VERSION }}
@@ -89,18 +69,11 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Create Build Environment
-        # Some projects don't allow in-source building, so create a separate build directory
-        # We'll use this as our working directory for all subsequent commands
         run: cmake -E make_directory ${{github.workspace}}/build
 
       - name: Get Conan
         id: conan
         uses: turtlebrowser/get-conan@c171f295f3f507360ee018736a6608731aa2109d #v1.2
-
-      - name: linux package install
-        run: |
-          sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends jq
 
       - name: Setup Conan Cache
         uses: actions/cache@v4
@@ -110,41 +83,27 @@ jobs:
           restore-keys: conan-${{ runner.os }}-
 
       - name: Configure CMake
-        # Use a bash shell so we can use the same syntax for environment variable
-        # access regardless of the host operating system
         shell: bash
         working-directory: ${{github.workspace}}/build
-        # Note the current convention is to use the -S and -B options here to specify source
-        # and build directories, but this is only available with CMake 3.13 and higher.
-        # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
         run: PKG_CONFIG_PATH=${{github.workspace}}/local/lib/pkgconfig cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake
 
       - name: Get VERSION
         id: build
         run: |
           echo "VERSION=`cat ${{github.workspace}}/build/VERSION`" >> $GITHUB_ENV
-          echo "::set-output name=version::$(cat ${{github.workspace}}/build/VERSION)"
           echo "COMMIT=`git rev-parse --short HEAD`" >> $GITHUB_ENV
 
       - name: Build
         working-directory: ${{github.workspace}}/build
         shell: bash
-        # Execute the build.  You can specify a specific target with "--target <NAME>"
-        run: cmake --build . --config $BUILD_TYPE -- -j 2
+        run: cmake --build . --config $BUILD_TYPE -- -j 4
 
       - name: Test
         working-directory: ${{github.workspace}}/build
         shell: bash
-        # Execute tests defined by the CMake configuration.
-        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: sudo ctest -C $BUILD_TYPE
 
   build-win64:
-    # The CMake configure and build commands are platform agnostic and should work equally
-    # well on Windows or Mac.  You can convert this to a matrix build if you need
-    # cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-
     runs-on: windows-2019
     outputs:
       version_number: ${{ env.VERSION }}
@@ -152,8 +111,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Create Build Environment
-        # Some projects don't allow in-source building, so create a separate build directory
-        # We'll use this as our working directory for all subsequent commands
         run: cmake -E make_directory ${{github.workspace}}\build
 
       - name: Get Conan
@@ -168,13 +125,8 @@ jobs:
           restore-keys: conan-${{ runner.os }}-
 
       - name: Configure CMake
-        # Use a bash shell so we can use the same syntax for environment variable
-        # access regardless of the host operating system
         shell: bash
         working-directory: ${{github.workspace}}\build
-        # Note the current convention is to use the -S and -B options here to specify source
-        # and build directories, but this is only available with CMake 3.13 and higher.
-        # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
         run: PKG_CONFIG_PATH=${{github.workspace}}\local\lib\pkgconfig cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake
 
       - name: Get VERSION
@@ -187,7 +139,6 @@ jobs:
       - name: Build
         working-directory: ${{github.workspace}}\build
         shell: bash
-        # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: cmake --build . --config $BUILD_TYPE -- -m
       
       # TODO: Fix unit tests for windows platform
@@ -304,29 +255,18 @@ jobs:
         id: build
         run: |
           echo "VERSION=${{needs.unit-tests-linux.outputs.version_number}}" >> $GITHUB_ENV
-          echo "::set-output name=version::$(echo env.VERSION)"
 
       - name: Generate ref tag (develop)
-        run: |
-          echo "REF_TAG=latest-develop" >> $GITHUB_ENV
-          echo "PRERELEASE=true" >> $GITHUB_ENV
-          echo "DRAFT=false" >> $GITHUB_ENV
+        run: echo "REF_TAG=latest-develop" >> $GITHUB_ENV
 
       - name: Debug ref tag
         run: echo ${{ env.REF_TAG }}
-        
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker Hub
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
         with:
-          username: ${{ secrets.ORB_DOCKERHUB_USERNAME }}
-          password: ${{ secrets.ORB_DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Replace token
         run: |
@@ -347,27 +287,18 @@ jobs:
 
       - name: Build + push - pktvisor (multi-arch)
         env:
-          IMAGE_NAME1: orbcommunity/pktvisor
-          IMAGE_NAME2: ghcr.io/orb-community/pktvisor
+          IMAGE_NAME: netboxlabs/pktvisor
         uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 #v6.10.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./docker/Dockerfile.crashhandler
           platforms: linux/amd64
-          tags: ${{ env.IMAGE_NAME1 }}:${{ needs.unit-tests-linux.outputs.version_number }} , ${{ env.IMAGE_NAME1 }}:${{ env.REF_TAG }} , ${{ env.IMAGE_NAME2 }}:amd64-${{needs.unit-tests-linux.outputs.commit_hash}}
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }}
+            ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
           outputs: type=docker,dest=/tmp/amd64.tar
-
-      - name: Load image
-        env:
-          IMAGE_NAME1: orbcommunity/pktvisor
-          IMAGE_NAME2: ghcr.io/orb-community/pktvisor
-        run: |
-          docker load --input /tmp/amd64.tar
-          docker image ls -a
-          docker push ${{ env.IMAGE_NAME2 }}:amd64-${{needs.unit-tests-linux.outputs.commit_hash}}
-          docker push ${{ env.IMAGE_NAME1 }}:${{ env.REF_TAG }}
-          docker push ${{ env.IMAGE_NAME1 }}:${{ needs.unit-tests-linux.outputs.version_number }}
 
   build-app-image-x64:
     needs: [ package-amd64 ]
@@ -390,20 +321,15 @@ jobs:
 
       - name: Get VERSION
         id: build
-        run: |
-          echo "VERSION=`cat ${{github.workspace}}/build/VERSION`" >> $GITHUB_ENV
-          echo "::set-output name=version::$(cat ${{github.workspace}}/build/VERSION)"
+        run: echo "VERSION=`cat ${{github.workspace}}/build/VERSION`" >> $GITHUB_ENV
 
       - name: Debug version
         run: |
           echo ${{ env.VERSION }}
-          echo ${{ steps.build.outputs.version }}
 
       - name: Generate ref tag (develop)
         run: |
           echo "REF_TAG=latest-develop" >> $GITHUB_ENV
-          echo "PRERELEASE=true" >> $GITHUB_ENV
-          echo "DRAFT=false" >> $GITHUB_ENV       
 
       - name: Prepare version file
         run: |
@@ -431,12 +357,12 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
         with:
-          username: ${{ secrets.ORB_DOCKERHUB_USERNAME }}
-          password: ${{ secrets.ORB_DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build + push - pktvisor-prom-write
         env:
-          IMAGE_NAME: orbcommunity/pktvisor-prom-write
+          IMAGE_NAME: netboxlabs/pktvisor-prom-write
         working-directory: ${{github.workspace}}/centralized_collection/prometheus/docker-grafana-agent
         run: |
           docker build . --file Dockerfile --build-arg PKTVISOR_TAG=${{ env.REF_TAG }} --tag ${{ env.IMAGE_NAME }}:${{ env.VERSION }} --tag ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
@@ -444,7 +370,7 @@ jobs:
 
       - name: Generate AppImage
         env:
-          IMAGE_NAME: orbcommunity/pktvisor
+          IMAGE_NAME: netboxlabs/pktvisor
         working-directory: ${{github.workspace}}/appimage
         run: |
           DEV_IMAGE="${{ env.IMAGE_NAME }}:${{ env.VERSION }}" DEV_MODE=t make pktvisor-x86_64.AppImage
@@ -500,18 +426,16 @@ jobs:
         run: ls -lha .
 
       - name: Generate ref tag (develop)
-        if: ${{ env.BRANCH_NAME == 'develop' }}
-        run: |
-          echo "REF_TAG=latest-develop" >> $GITHUB_ENV
-          echo "PRERELEASE=false" >> $GITHUB_ENV
-          echo "DRAFT=true" >> $GITHUB_ENV
+        run: echo "REF_TAG=latest-develop" >> $GITHUB_ENV
 
-      - name: Login to GitHub Container Registry
+      - name: Debug ref tag
+        run: echo ${{ env.REF_TAG }}
+
+      - name: Login to Docker Hub
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf #v3.2.0
@@ -533,95 +457,15 @@ jobs:
       - name: Build + push - pktvisor (multi-arch)
         id: docker_build
         env:
-          IMAGE_NAME: ghcr.io/orb-community/pktvisor
+          IMAGE_NAME: netboxlabs/pktvisor
         uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 #v6.10.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./docker/Dockerfile.crashhandler
           platforms: linux/arm64
-          tags: ${{ env.IMAGE_NAME }}:arm64-${{needs.unit-tests-linux.outputs.commit_hash}}
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }}
+            ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
           outputs: type=docker,dest=/tmp/arm64.tar
-
-      - name: Load image
-        env:
-          IMAGE_NAME: ghcr.io/orb-community/pktvisor
-        run: |
-          docker load --input /tmp/arm64.tar
-          docker image ls -a
-          docker push ${{ env.IMAGE_NAME }}:arm64-${{needs.unit-tests-linux.outputs.commit_hash}}     
-            
-  pushing-manifests:
-    needs: [ unit-tests-linux, package-amd64, package-arm64 ]
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-    steps:    
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create docker manifest
-        run: |
-          docker manifest create ghcr.io/orb-community/pktvisor:latest-develop \
-          ghcr.io/orb-community/pktvisor:amd64-${{needs.unit-tests-linux.outputs.commit_hash}} \
-          ghcr.io/orb-community/pktvisor:arm64-${{needs.unit-tests-linux.outputs.commit_hash}}
-
-      - name: Push manifest to ghcr.io
-        run: |
-          docker manifest push ghcr.io/orb-community/pktvisor:latest-develop
-
-      - name: Install skopeo
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y skopeo
-          
-      - name: Login skopeo to ghcr
-        run: |
-          sudo skopeo login -u ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
-
-      - name: Login skopeo to dockerhub
-        run: |
-          sudo skopeo login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} docker.io
-
-      - name: Copy from ghcr.io to docker.io
-        run: |
-          sudo skopeo copy \
-          --all \
-          docker://ghcr.io/orb-community/pktvisor:latest-develop \
-          docker://docker.io/orbcommunity/pktvisor:latest-develop
-          sudo skopeo copy \
-          --all \
-          docker://ghcr.io/orb-community/pktvisor:latest-develop \
-          docker://docker.io/orbcommunity/pktvisor:develop
-          sudo skopeo copy \
-          --all \
-          docker://ghcr.io/orb-community/pktvisor:latest-develop \
-          docker://docker.io/orbcommunity/pktvisor:${{ needs.unit-tests-linux.outputs.version_number }}
-          
-          
-      - name: Delete arm64 images from ghcr.io
-        uses: bots-house/ghcr-delete-image-action@3827559c68cb4dcdf54d813ea9853be6d468d3a4 #v1.1.0
-        with:
-          owner: orb-community
-          name: pktvisor
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: arm64-${{needs.unit-tests-linux.outputs.commit_hash}}
-          
-      - name: Delete amd64 images from ghcr.io
-        uses: bots-house/ghcr-delete-image-action@3827559c68cb4dcdf54d813ea9853be6d468d3a4 #v1.1.0
-        with:
-          owner: orb-community
-          name: pktvisor
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: amd64-${{needs.unit-tests-linux.outputs.commit_hash}}
-          
-      - name: Delete latest-develop images from ghcr.io
-        uses: bots-house/ghcr-delete-image-action@3827559c68cb4dcdf54d813ea9853be6d468d3a4 #v1.1.0
-        with:
-          owner: orb-community
-          name: pktvisor
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: latest-develop
