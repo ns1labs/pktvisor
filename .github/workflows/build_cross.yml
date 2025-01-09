@@ -133,7 +133,7 @@ jobs:
       - name: Build
         run: |
           cd ${{github.workspace}}/src/build
-          make -j4 VERBOSE=1
+          sudo make -j4 VERBOSE=1
 
       - name: Print sccache stats
         run: |
