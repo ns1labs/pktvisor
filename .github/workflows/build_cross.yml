@@ -86,9 +86,8 @@ jobs:
           path: src
 
       - name: Create Conan configuration
+        working-directory: ${{github.workspace}}/src
         run: |
-          # init config
-          cd src/
           conan config list
           python3 -c 'import yaml; p = "build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
           conan profile detect
@@ -117,8 +116,8 @@ jobs:
         run: sed -i "/crashpad/d" ${{github.workspace}}/src/conanfile.py
 
       - name: Configure
+        working-directory: ${{github.workspace}}/src/build
         run: |
-          cd ${{github.workspace}}/src/build
           export CC CXX
           export LDFLAGS=-static
           cmake .. \
@@ -131,9 +130,8 @@ jobs:
             -DCMAKE_CXX_STANDARD_LIBRARIES=-latomic
 
       - name: Build
-        run: |
-          cd ${{github.workspace}}/src/build
-          sudo make -j4 VERBOSE=1
+        working-directory: ${{github.workspace}}/src/build
+        run: cmake --build . --config Release -- -j 4
 
       - name: Print sccache stats
         run: |

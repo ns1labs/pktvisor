@@ -25,9 +25,9 @@ target_include_directories(VisorInputPcap
 
 target_link_libraries(VisorInputPcap
         PUBLIC
+        ${ADDITIONAL_LIBS}
         Visor::Core
         Visor::Lib::Utils
-        ${ADDITIONAL_LIBS}
         )
 
 set(VISOR_STATIC_PLUGINS ${VISOR_STATIC_PLUGINS} Visor::Input::Pcap PARENT_SCOPE)
