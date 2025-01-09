@@ -44,6 +44,9 @@ jobs:
           path: ${{github.workspace}}/build/conan_home/
           key: conan-${{ runner.os }}-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-
+      
+      - name: Detect Conan Profile
+        run: conan profile detect -f
 
       - name: Configure CMake
         shell: bash
