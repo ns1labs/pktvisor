@@ -71,11 +71,25 @@ jobs:
       - name: Install Conan
         run: pip install --no-cache-dir conan --force-reinstall
 
+      - name: Restore sccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/sccache
+          key: sccache-${{matrix.arch}}-${{github.head_ref||github.event.ref}}-${{github.run_id}}
+          restore-keys: |
+            sccache-${{matrix.arch}}-${{github.head_ref||github.event.ref}}-
+            sccache-${{matrix.arch}}-${{github.base_ref||github.event.repository.default_branch}}-
+
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          path: src
+
       - name: Create Conan configuration
         run: |
           # init config
           conan config list
-          python3 -c 'import yaml; p = "build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["None", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
+          python3 -c 'import yaml; p = "${{github.workspace}}/build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["None", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
 
 
       - name: Create Conan host profile
@@ -94,20 +108,6 @@ jobs:
           CXX=${{github.workspace}}/toolchain/bin/${{matrix.cxx}}
           LDFLAGS=${{matrix.ldflags}}
           EOF
-
-      - name: Restore sccache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/sccache
-          key: sccache-${{matrix.arch}}-${{github.head_ref||github.event.ref}}-${{github.run_id}}
-          restore-keys: |
-            sccache-${{matrix.arch}}-${{github.head_ref||github.event.ref}}-
-            sccache-${{matrix.arch}}-${{github.base_ref||github.event.repository.default_branch}}-
-
-      - name: Checkout sources
-        uses: actions/checkout@v4
-        with:
-          path: src
 
       - name: Remove crashpad from conanfile
         run: sed -i "/crashpad/d" ${{github.workspace}}/src/conanfile.py
