@@ -90,7 +90,7 @@ jobs:
           # init config
           cd src/
           conan config list
-          python3 -c 'import yaml; p = "build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["None", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
+          python3 -c 'import yaml; p = "build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = [null, "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
 
 
       - name: Create Conan host profile
@@ -101,6 +101,7 @@ jobs:
           arch=${{matrix.conan_arch}}
           compiler=gcc
           compiler.version=11
+          compiler.cppstd=gnu17
           compiler.libcxx=libstdc++11
           compiler.libc=musl
           build_type=Release
