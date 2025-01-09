@@ -91,6 +91,8 @@ jobs:
           cd src/
           conan config list
           python3 -c 'import yaml; p = "build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
+          conan profile detect
+          echo "compiler.libc=glibc" >> $(conan profile path default)
 
 
       - name: Create Conan host profile
