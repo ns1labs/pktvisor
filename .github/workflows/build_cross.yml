@@ -132,7 +132,7 @@ jobs:
 
       - name: Build
         run: |
-          cd build
+          cd ${{github.workspace}}/src/build
           make -j4 VERBOSE=1
 
       - name: Print sccache stats
