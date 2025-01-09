@@ -89,7 +89,6 @@ jobs:
         run: |
           # init config
           cd src/
-          conan config home
           conan config list
           python3 -c 'import yaml; p = "build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["None", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
 
@@ -116,10 +115,10 @@ jobs:
 
       - name: Configure
         run: |
-          cd build
+          cd ${{github.workspace}}/src/build
           export CC CXX
           export LDFLAGS=-static
-          cmake "${{github.workspace}}/src" \
+          cmake .. \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake \
             -DCONAN_HOST_PROFILE="${{github.workspace}}/host" \
