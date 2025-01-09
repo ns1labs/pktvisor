@@ -88,6 +88,7 @@ jobs:
       - name: Create Conan configuration
         run: |
           # init config
+          conan config home
           conan config list
           python3 -c 'import yaml; p = "${{github.workspace}}/src/build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["None", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
 
