@@ -74,10 +74,8 @@ jobs:
       - name: Create Conan configuration
         run: |
           # init config
-          conan config init
-          conan config set general.revisions_enabled=1
-          # add custom compiler settings for libc
-          python3 -c 'import yaml; p = "${{env.CONAN_USER_HOME}}/.conan/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["None", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
+          conan config list
+          python3 -c 'import yaml; p = "build/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["None", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
 
 
       - name: Create Conan host profile
@@ -116,7 +114,6 @@ jobs:
 
       - name: Configure
         run: |
-          mkdir build
           cd build
           export CC CXX
           export LDFLAGS=-static

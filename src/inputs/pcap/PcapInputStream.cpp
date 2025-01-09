@@ -5,6 +5,7 @@
 #include "PcapInputStream.h"
 #include "NetworkInterfaceScan.h"
 #include "ThreadName.h"
+#include <pcap.h>
 #include <timer.hpp>
 #ifdef __GNUC__
 #pragma GCC diagnostic push
