@@ -96,8 +96,9 @@ jobs:
 
 
       - name: Create Conan host profile
+        working-directory: ${{github.workspace}}/src
         run: |
-          cat > "${{github.workspace}}/host" << "EOF"
+          cat > "$(conan config home)/profiles/host" << "EOF"
           [settings]
           os=Linux
           arch=${{matrix.conan_arch}}
@@ -116,7 +117,7 @@ jobs:
       - name: Install dependencies
         working-directory: ${{github.workspace}}/src
         run: |
-          conan install -pr:b=default -pr:h="${{github.workspace}}/host" --build=missing
+          conan install . -pr:b=default -pr:h="host" --build=missing
 
       - name: Configure
         working-directory: ${{github.workspace}}/src/build

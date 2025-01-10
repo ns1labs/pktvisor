@@ -29,8 +29,8 @@ class Pktvisor(ConanFile):
         self.requires("robin-hood-hashing/3.11.5")
         self.requires("libcurl/8.11.1")
         if (
-            "libc" in self.settings.compiler.fields
-            and self.settings.compiler.libc != "musl"
+            "libc" not in self.settings.compiler.fields
+            or self.settings.compiler.libc != "musl"
         ):
             self.requires("sentry-crashpad/0.6.5")
 
