@@ -113,18 +113,22 @@ jobs:
           LDFLAGS=${{matrix.ldflags}}
           EOF
 
-      - name: Remove crashpad from conanfile
-        run: sed -i "/crashpad/d" ${{github.workspace}}/src/conanfile.py
+      - name: Install dependencies
+        working-directory: ${{github.workspace}}/src
+        run: |
+          conan install -pr:b=default -pr:h="${{github.workspace}}/host" --build=missing
 
       - name: Configure
         working-directory: ${{github.workspace}}/src/build
         run: |
           export CC CXX
           export LDFLAGS=-static
+          source Release/generators/conanbuild.sh
           cmake .. \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake \
             -DCONAN_HOST_PROFILE="${{github.workspace}}/host" \
+            -DCONAN_INSTALL_ARGS=--build=never \
             -DCRASHPAD_NOT_SUPPORTED=true \
             -DCMAKE_C_COMPILER_LAUNCHER="${{github.workspace}}/bin/sccache" -DCMAKE_CXX_COMPILER_LAUNCHER="${{github.workspace}}/bin/sccache" \
             -DCORRADE_RC_PROGRAM=$(command -v corrade-rc) \

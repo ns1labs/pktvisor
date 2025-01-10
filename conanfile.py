@@ -28,12 +28,13 @@ class Pktvisor(ConanFile):
         self.requires("yaml-cpp/0.8.0")
         self.requires("robin-hood-hashing/3.11.5")
         self.requires("libcurl/8.11.1")
-        self.requires("sentry-crashpad/0.6.5")
+        self.requires("libevent/2.1.12")
+        if self.settings.compiler.libc and self.settings.compiler.libc != "musl":
+            self.requires("sentry-crashpad/0.6.5")
 
     def build_requirements(self):
         self.tool_requires("corrade/2020.06")
         self.tool_requires("protobuf/5.27.0")
-        self.tool_requires("ninja/1.12.1")
 
     def layout(self):
         cmake_layout(self)
