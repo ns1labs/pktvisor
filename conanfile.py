@@ -28,8 +28,8 @@ class Pktvisor(ConanFile):
         self.requires("yaml-cpp/0.8.0")
         self.requires("robin-hood-hashing/3.11.5")
         self.requires("libcurl/8.11.1")
-        libc = self.settings.compiler.get("libc", "")
-        if libc != "musl":
+        libc = getattr(self.settings.compiler, "libc", None)
+        if libc and libc != "musl":
             self.requires("sentry-crashpad/0.6.5")
 
     def build_requirements(self):
