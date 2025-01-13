@@ -17,15 +17,10 @@ jobs:
 
     strategy:
       fail-fast: false
-      #matrix:
-      #  language: [ 'cpp', 'go', 'python' ]
-        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
-        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
 
     env:
       CC: gcc
       CXX: g++
-      CONAN_USER_HOME: "${{github.workspace}}"
 
     steps:
     - name: Checkout repository
@@ -70,30 +65,6 @@ jobs:
         # Run Build - set up dependencies, env vars, compile, and make test
         #install conan
         pip install --no-cache-dir conan --force-reinstall
-        # create conan config
-        CONAN_V2_MODE=1 conan config init
-        conan config set general.revisions_enabled=1
-        # add custom compiler settings for libc
-        python3 -c 'import yaml; p = "${{env.CONAN_USER_HOME}}/.conan/settings.yml"; d = yaml.safe_load(open(p)); d["compiler"]["gcc"]["libc"] = ["None", "glibc", "musl"]; yaml.safe_dump(d, open(p, "w"))'
-        # Create Conan host profile
-        cat > "${{env.CONAN_USER_HOME}}/.conan/profiles/host" << "EOF"
-        [settings]
-        os=Linux
-        os_build=Linux
-        arch=${{matrix.conan_arch}}
-        arch_build=x86_64
-        compiler=gcc
-        compiler.version=11
-        compiler.libcxx=libstdc++11
-        compiler.libc=musl
-        build_type=Release
-        [options]
-        pcapplusplus:with_musl=True
-        [env]
-        CC=${{github.workspace}}/toolchain/bin/${{matrix.cc}}
-        CXX=${{github.workspace}}/toolchain/bin/${{matrix.cxx}}
-        LDFLAGS=${{matrix.ldflags}}
-        EOF
         # clone the repository, not sure if this needs to be done
         git clone https://github.com/netboxlabs/pktvisor.git
         cd pktvisor

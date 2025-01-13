@@ -7,9 +7,9 @@ class Pktvisor(ConanFile):
     generators = "CMakeToolchain", "CMakeDeps"
 
     def requirements(self):
-        self.requires("catch2/3.7.1")
+        self.requires("catch2/3.8.0")
         self.requires("corrade/2020.06")
-        self.requires("cpp-httplib/0.18.2")
+        self.requires("cpp-httplib/0.18.3")
         self.requires("docopt.cpp/0.6.3")
         self.requires("fast-cpp-csv-parser/cci.20240102")
         self.requires("json-schema-validator/2.3.0")
@@ -17,7 +17,7 @@ class Pktvisor(ConanFile):
         self.requires("nlohmann_json/3.11.3")
         self.requires("openssl/3.3.2")
         if self.settings.os != "Windows":
-            self.requires("libpcap/1.10.4", force=True)
+            self.requires("libpcap/1.10.5", force=True)
         else:
             self.requires("npcap/1.70")
         self.requires("opentelemetry-cpp/1.17.0")

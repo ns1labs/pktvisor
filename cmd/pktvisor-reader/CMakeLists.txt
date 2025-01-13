@@ -7,3 +7,8 @@ target_link_libraries(pktvisor-reader
         docopt_s
         ${VISOR_STATIC_PLUGINS}
         )
+
+set_target_properties(pktvisor-reader
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin"
+        )
