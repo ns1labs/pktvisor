@@ -218,7 +218,7 @@ jobs:
     needs: [ unit-tests-linux ]
     runs-on: ubuntu-latest
     # if this is a push into one of our main branches (rather than just a pull request), we will also package
-    if: github.event_name != 'pull_request'
+    #if: github.event_name != 'pull_request'
     outputs:
       version_number: ${{ env.VERSION }}
     steps:

@@ -19,27 +19,21 @@ function build() {
   cp -rf /github/workspace/cmake/ /pktvisor-src/cmake/
   cp -rf /github/workspace/CMakeLists.txt /pktvisor-src/
   cp -rf /github/workspace/conanfile.py /pktvisor-src/
-  mkdir /tmp/build
-  cd /tmp/build
-  cp -rf /pktvisor-src/build/conan_home/ .
-  chmod -R 777 /tmp/build/conan_home/
-  conan profile new --detect default
-  conan profile update settings.compiler.libcxx=libstdc++11 default
-  conan config set general.revisions_enabled=1
-  PKG_CONFIG_PATH=/local/lib/pkgconfig cmake -DCMAKE_BUILD_TYPE=$INPUT_BUILD_TYPE -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake -DASAN=$INPUT_ASAN /pktvisor-src
+  cd /pktvisor-src/build/
+  conan profile detect -f
+  PKG_CONFIG_PATH=/local/lib/pkgconfig cmake -DCMAKE_BUILD_TYPE=$INPUT_BUILD_TYPE -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake -DASAN=$INPUT_ASAN ..
   make all -j 4
 }
 
 function move() {
   echo "========================= Compacting binary and copying ========================="
-  cd /tmp/build
-  cp -rf /tmp/build/bin/pktvisord /github/workspace/
-  strip -s /tmp/build/bin/crashpad_handler
-  cp -rf /tmp/build/bin/crashpad_handler /github/workspace/
-  cp -rf /tmp/build/bin/pktvisor-reader /github/workspace/
-  cp -rf /tmp/build/VERSION /github/workspace/
-  chmod -R 777 /tmp/build/conan_home/
-  cp -rf /tmp/build/conan_home/ /github/workspace/build/
+  cd /pktvisor-src/build/
+  cp -rf /pktvisor-src/build/bin/pktvisord /github/workspace/
+  strip -s /pktvisor-src/build/bin/crashpad_handler
+  cp -rf /pktvisor-src/build/bin/crashpad_handler /github/workspace/
+  cp -rf /pktvisor-src/build/bin/pktvisor-reader /github/workspace/
+  cp -rf /pktvisor-src/build/VERSION /github/workspace/
+  cp -rf /pktvisor-src/build/ /github/workspace/build/
   cp -rf /pktvisor-src/golang/pkg/client/version.go /github/workspace/version.go
   cp -rf /pktvisor-src/src/tests/fixtures/pktvisor-port-service-names.csv /github/workspace/custom-iana.csv
 }
