@@ -19,6 +19,7 @@ function build() {
   cp -rf /github/workspace/cmake/ /pktvisor-src/cmake/
   cp -rf /github/workspace/CMakeLists.txt /pktvisor-src/
   cp -rf /github/workspace/conanfile.py /pktvisor-src/
+  cp -rf /github/workspace/.conanrc /pktvisor-src/
   cd /pktvisor-src/build/
   conan profile detect -f
   PKG_CONFIG_PATH=/local/lib/pkgconfig cmake -DCMAKE_BUILD_TYPE=$INPUT_BUILD_TYPE -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake -DASAN=$INPUT_ASAN ..
