@@ -11,7 +11,7 @@ WORKDIR /pktvisor-src
 RUN apt-get update && \
     apt-get upgrade --yes && \
     apt-get install --yes --no-install-recommends ${BUILD_DEPS} && \
-    pip3 install conan --force-reinstall
+    pip3 install conan --force-reinstall --break-system-packages
     
 RUN chmod +x /entrypoint.sh
 
