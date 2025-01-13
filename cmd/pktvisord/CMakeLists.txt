@@ -23,6 +23,10 @@ target_link_libraries(pktvisord
 set_target_properties(pktvisord
         PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin"
+        RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECT_BINARY_DIR}/bin"
+        RUNTIME_OUTPUT_DIRECTORY_RELEASE "${PROJECT_BINARY_DIR}/bin"
+        RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${PROJECT_BINARY_DIR}/bin"
+        RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${PROJECT_BINARY_DIR}/bin"
         )
 
 #copy conan crashpad built binary to binaries folder
