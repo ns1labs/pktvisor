@@ -74,7 +74,7 @@ jobs:
         # build and run tests
         sudo make all test
         #remove conan files
-        rm -rf conan_home/
+        rm -rf p/
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
@@ -87,7 +87,7 @@ jobs:
       uses: advanced-security/filter-sarif@v1
       with:
         patterns: |
-          -pktvisor/build/conan_home/**/*
+          -pktvisor/build/p/**/*
         input: sarif-results/cpp.sarif
         output: sarif-results/cpp.sarif
 

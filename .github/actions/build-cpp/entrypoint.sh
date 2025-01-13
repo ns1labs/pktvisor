@@ -33,14 +33,14 @@ function move() {
   cp -rf /pktvisor-src/build/bin/crashpad_handler /github/workspace/
   cp -rf /pktvisor-src/build/bin/pktvisor-reader /github/workspace/
   cp -rf /pktvisor-src/build/VERSION /github/workspace/
-  cp -rf /pktvisor-src/build/ /github/workspace/build/
+  cp -rf /pktvisor-src/build/p/ /github/workspace/build/
   cp -rf /pktvisor-src/golang/pkg/client/version.go /github/workspace/version.go
   cp -rf /pktvisor-src/src/tests/fixtures/pktvisor-port-service-names.csv /github/workspace/custom-iana.csv
 }
 
 function publishToBugsplat() {
   echo "========================= Publishing symbol to bugsplat ========================="
-  cd /tmp/build
+  cd /pktvisor-src/build/
   if [ "$INPUT_BUGSPLAT" == "true" ]; then
   wget https://github.com/orb-community/CrashpadTools/raw/main/linux/dump_syms
   chmod a+x ./dump_syms
