@@ -1,6 +1,6 @@
 FROM debian:bookworm-slim
 
-ENV BUILD_DEPS "g++ cmake make git pkgconf jq python3-pip python3-setuptools ca-certificates libasan6 zip curl python wget"
+ENV BUILD_DEPS "g++ cmake make git pkgconf jq python3 python3-pip python3-setuptools ca-certificates libasan6 zip curl wget"
 
 COPY ./entrypoint.sh /entrypoint.sh
 
