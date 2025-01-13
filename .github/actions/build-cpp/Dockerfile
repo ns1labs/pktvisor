@@ -1,8 +1,4 @@
-FROM debian:bullseye-slim
-
-LABEL author="Everton Haise Taques <everton.taques@encora.com>"
-LABEL maintainer="Orb Community"
-LABEL version="1.0.0"
+FROM debian:bookworm-slim
 
 ENV BUILD_DEPS "g++ cmake make git pkgconf jq python3-pip python3-setuptools ca-certificates libasan6 zip curl python wget"
 
