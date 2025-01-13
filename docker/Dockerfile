@@ -1,6 +1,6 @@
 FROM debian:bookworm-slim AS cppbuild
 
-ENV BUILD_DEPS "g++ cmake make git pkgconf jq python3 python3-pip python3-setuptools ca-certificates"
+ENV BUILD_DEPS "g++ cmake make automake autoconf git pkgconf jq python3 python3-pip python3-setuptools ca-certificates"
 
 RUN \
     apt-get update && \
