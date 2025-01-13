@@ -1,9 +1,6 @@
 name: Debug Builds
 
 on:
-  pull_request:
-    branches:
-      - develop
   push:
     branches: [ develop, master, release/** ]
 
@@ -130,7 +127,7 @@ jobs:
         run: echo ${{ env.BRANCH_NAME }}
 
       - name: Get VERSION
-        run: echo "VERSION=`cat ${{github.workspace}}/build/VERSION`" >> $GITHUB_ENV
+        run: echo "VERSION=`cat ${{github.workspace}}/VERSION`" >> $GITHUB_ENV
 
       - name: Debug version
         run: echo ${{ env.VERSION }}
