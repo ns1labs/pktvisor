@@ -62,7 +62,7 @@ jobs:
       - name: Test
         working-directory: ${{github.workspace}}/build
         shell: bash
-        run: ctest -C $BUILD_TYPE
+        run: ctest -C $BUILD_TYPE --output-on-failure
         
   unit-tests-linux:
     runs-on: ubuntu-latest
@@ -105,7 +105,7 @@ jobs:
       - name: Test
         working-directory: ${{github.workspace}}/build
         shell: bash
-        run: sudo ctest -C $BUILD_TYPE
+        run: sudo ctest --output-on-failure
 
   build-win64:
     runs-on: windows-2019

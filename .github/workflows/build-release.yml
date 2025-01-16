@@ -52,7 +52,7 @@ jobs:
       - name: Test
         working-directory: ${{github.workspace}}/build
         shell: bash
-        run: sudo ctest -C $BUILD_TYPE
+        run: sudo ctest --output-on-failure
 
   prebuild-package:
     needs: [ unit-tests ]

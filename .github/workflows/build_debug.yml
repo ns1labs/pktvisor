@@ -53,7 +53,7 @@ jobs:
       - name: Test
         working-directory: ${{github.workspace}}/build
         shell: bash
-        run: sudo ctest
+        run: sudo ctest --output-on-failure
         
       - name: Build Coverage
         working-directory: ${{github.workspace}}/build
