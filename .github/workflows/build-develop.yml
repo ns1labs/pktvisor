@@ -282,11 +282,11 @@ jobs:
         run: |
           echo "VERSION=${{needs.unit-tests-linux.outputs.version_number}}" >> $GITHUB_ENV
 
-      - name: Generate ref tag (develop)
-        run: echo "REF_TAG=latest-develop" >> $GITHUB_ENV
-
-      - name: Debug ref tag
-        run: echo ${{ env.REF_TAG }}
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 #v5.6.1
+        with:
+          images: ${{ env.IMAGE_NAME }}
 
       - name: Login to Docker Hub
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
@@ -319,9 +319,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.crashhandler
           platforms: linux/amd64
-          tags: |
-            ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }}
-            ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
+          labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,"name=${{ env.IMAGE_NAME }}",push-by-digest=true,name-canonical=true,push=true
 
       - name: Export digest
@@ -467,6 +465,12 @@ jobs:
       - name: Debug ref tag
         run: echo ${{ env.REF_TAG }}
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 #v5.6.1
+        with:
+          images: ${{ env.IMAGE_NAME }}
+
       - name: Login to Docker Hub
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 #v3.3.0
         with:
@@ -498,9 +502,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.crashhandler
           platforms: linux/arm64
-          tags: |
-            ${{ env.IMAGE_NAME }}:${{ needs.unit-tests-linux.outputs.version_number }}
-            ${{ env.IMAGE_NAME }}:${{ env.REF_TAG }}
+          labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,"name=${{ env.IMAGE_NAME }}",push-by-digest=true,name-canonical=true,push=true
 
       - name: Export digest
