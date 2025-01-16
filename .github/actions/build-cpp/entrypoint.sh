@@ -14,14 +14,14 @@ function build() {
   cp -rf /github/workspace/libs/ /pktvisor-src/libs/
   cp -rf /github/workspace/docker/ /pktvisor-src/docker/
   cp -rf /github/workspace/golang/ /pktvisor-src/golang/
-  cp -rf /github/workspace/build/ /pktvisor-src/build/
   cp -rf /github/workspace/integration_tests/ /pktvisor-src/integration_tests/
   cp -rf /github/workspace/cmake/ /pktvisor-src/cmake/
   cp -rf /github/workspace/CMakeLists.txt /pktvisor-src/
   cp -rf /github/workspace/conanfile.py /pktvisor-src/
   cp -rf /github/workspace/.conanrc /pktvisor-src/
-  cd /pktvisor-src/build/
+  cd /pktvisor-src/
   conan profile detect -f
+  cd /pktvisor-src/build/
   PKG_CONFIG_PATH=/local/lib/pkgconfig cmake -DCMAKE_BUILD_TYPE=$INPUT_BUILD_TYPE -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake -DASAN=$INPUT_ASAN ..
   make all -j 4
 }
