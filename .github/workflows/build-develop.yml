@@ -244,10 +244,6 @@ jobs:
         working-directory: ${{github.workspace}}/build
         shell: bash
         run: cmake --build . --config Release -- -j 4
-
-      - name: Get VERSION
-        id: build
-        run: echo "VERSION=`cat ${{github.workspace}}/build/VERSION`" >> $GITHUB_ENV
  
       - name: move files
         shell: bash
@@ -267,7 +263,7 @@ jobs:
           wget https://github.com/orb-community/CrashpadTools/raw/main/linux/symupload
           chmod a+x ./symupload
           ./dump_syms ${{github.workspace}}/pktvisord > pktvisor.sym
-          ./symupload -k ${{secrets.BUGSPLAT_KEY}} pktvisor.sym ${{secrets.BUGSPLAT_SYMBOL_URL}}${{env.VERSION}} 2>/dev/null
+          ./symupload -k ${{secrets.BUGSPLAT_KEY}} pktvisor.sym ${{secrets.BUGSPLAT_SYMBOL_URL}}${{needs.unit-tests-linux.outputs.version_number}} 2>/dev/null
 
       - name: Build pktvisor-cli
         uses: ./.github/actions/build-go
