@@ -437,17 +437,61 @@ jobs:
           path: ${{github.workspace}}/build/p/
           key: conan-${{ runner.os }}-arm64-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-arm64-
+      
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 
-      - name: Build pktvisord + push symbol to bugsplat.com
-        uses: ./.github/actions/build-cpp
-        with:
-          context: "."
-          build_type: "Release"
-          asan: "OFF"
-          bugsplat_key: ${{secrets.BUGSPLAT_KEY}}
-          bugsplat_symbol_url: ${{secrets.BUGSPLAT_SYMBOL_URL}}
-          bugsplat: "false"
-          file: "./Dockerfile"
+      - name: Create Conan host profile
+        run: |
+          cat > "$(conan config home)/profiles/host" << "EOF"
+          [settings]
+          os=Linux
+          arch=aarch64
+          compiler=gcc
+          compiler.version=13
+          compiler.cppstd=17
+          compiler.libcxx=libstdc++11
+          build_type=Release
+          EOF
+
+      - name: Build Conan
+        run: conan install . --profile host --build missing
+
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{github.workspace}}/build
+        run: PKG_CONFIG_PATH=${{github.workspace}}/local/lib/pkgconfig cmake .. \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake \
+            -DCONAN_HOST_PROFILE="host" \
+            -DCONAN_INSTALL_ARGS=--build=never 
+  
+      - name: Build
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: cmake --build . --config Release -- -j 4
+  
+      - name: move files
+        shell: bash
+        run: |
+          cp -rf ${{github.workspace}}/build/bin/pktvisord ${{github.workspace}}/pktvisord
+          strip -s  ${{github.workspace}}/build/bin/crashpad_handler
+          cp -rf ${{github.workspace}}/build/bin/crashpad_handler ${{github.workspace}}/crashpad_handler
+          cp -rf ${{github.workspace}}/build/bin/pktvisor-reader ${{github.workspace}}/pktvisor-reader
+          cp -rf ${{github.workspace}}/golang/pkg/client/version.go ${{github.workspace}}/version.go
+          cp -rf ${{github.workspace}}/src/tests/fixtures/pktvisor-port-service-names.csv ${{github.workspace}}/custom-iana.csv
+  
+      - name: Push symbols to bugsplat
+        shell: bash
+        run: |
+          wget https://github.com/orb-community/CrashpadTools/raw/main/linux/dump_syms
+          chmod a+x ./dump_syms
+          wget https://github.com/orb-community/CrashpadTools/raw/main/linux/symupload
+          chmod a+x ./symupload
+          ./dump_syms ${{github.workspace}}/pktvisord > pktvisor.sym
+          ./symupload -k ${{secrets.BUGSPLAT_KEY}} pktvisor.sym ${{secrets.BUGSPLAT_SYMBOL_URL}}${{needs.unit-tests-linux.outputs.version_number}} 2>/dev/null
 
       - name: Build pktvisor-cli
         uses: ./.github/actions/build-go
@@ -458,12 +502,6 @@ jobs:
           
       - name: Debug artifacts
         run: ls -lha .
-
-      - name: Generate ref tag (develop)
-        run: echo "REF_TAG=latest-develop" >> $GITHUB_ENV
-
-      - name: Debug ref tag
-        run: echo ${{ env.REF_TAG }}
 
       - name: Docker meta
         id: meta
@@ -519,7 +557,7 @@ jobs:
             if-no-files-found: error
             retention-days: 1
 
-  merge:
+  merge-packages:
     runs-on: ubuntu-latest
     needs: [unit-tests-linux, package-amd64, package-arm64]
     steps:
@@ -546,10 +584,8 @@ jobs:
         with:
           images: ${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest-develop
+            type=raw,value=${{ needs.unit-tests-linux.outputs.version_number }}
 
       - name: Create manifest list and push
         working-directory: /tmp/digests
