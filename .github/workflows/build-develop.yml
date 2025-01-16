@@ -83,8 +83,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{github.workspace}}/build/p/
-          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
-          restore-keys: conan-${{ runner.os }}-
+          key: conan-${{ runner.os }}-amd64-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
+          restore-keys: conan-${{ runner.os }}-amd64-
 
       - name: Configure CMake
         shell: bash
@@ -236,8 +236,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{github.workspace}}/build/p/
-          key: conan-${{ runner.os }}-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
-          restore-keys: conan-${{ runner.os }}-
+          key: conan-${{ runner.os }}-amd64-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
+          restore-keys: conan-${{ runner.os }}-amd64
 
       - name: Configure CMake
         shell: bash
@@ -491,7 +491,7 @@ jobs:
           wget https://github.com/orb-community/CrashpadTools/raw/main/linux/symupload
           chmod a+x ./symupload
           ./dump_syms ${{github.workspace}}/pktvisord > pktvisor.sym
-          ./symupload -k ${{secrets.BUGSPLAT_KEY}} pktvisor.sym ${{secrets.BUGSPLAT_SYMBOL_URL}}${{needs.unit-tests-linux.outputs.version_number}} 2>/dev/null
+          ./symupload -k ${{secrets.BUGSPLAT_KEY}} pktvisor.sym ${{secrets.BUGSPLAT_SYMBOL_URL}}arm-${{needs.unit-tests-linux.outputs.version_number}} 2>/dev/null
 
       - name: Build pktvisor-cli
         uses: ./.github/actions/build-go
