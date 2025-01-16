@@ -235,39 +235,39 @@ jobs:
           key: conan-${{ runner.os }}-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-
 
-     - name: Configure CMake
-       shell: bash
-       working-directory: ${{github.workspace}}/build
-       run: PKG_CONFIG_PATH=${{github.workspace}}/local/lib/pkgconfig cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake -DCODE_COVERAGE=ON
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{github.workspace}}/build
+        run: PKG_CONFIG_PATH=${{github.workspace}}/local/lib/pkgconfig cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake -DCODE_COVERAGE=ON
+ 
+      - name: Build
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: cmake --build . --config Debug -- -j 4
 
-     - name: Get VERSION
-       id: build
-       run: echo "VERSION=`cat ${{github.workspace}}/build/VERSION`" >> $GITHUB_ENV
-
-     - name: Build
-       working-directory: ${{github.workspace}}/build
-       shell: bash
-       run: cmake --build . --config Debug -- -j 4
-
-     - name: move files
-       shell: bash
-       run: |
-         cp -rf ${{github.workspace}}/build/bin/pktvisord ${{github.workspace}}/pktvisord
-         strip -s  ${{github.workspace}}/build/bin/crashpad_handler
-         cp -rf ${{github.workspace}}/build/bin/crashpad_handler ${{github.workspace}}/crashpad_handler
-         cp -rf ${{github.workspace}}/build/bin/pktvisor-reader ${{github.workspace}}/pktvisor-reader
-         cp -rf ${{github.workspace}}/golang/pkg/client/version.go ${{github.workspace}}/version.go
-         cp -rf ${{github.workspace}}/src/tests/fixtures/pktvisor-port-service-names.csv ${{github.workspace}}/custom-iana.csv
-
-     - name: Push symbols to bugsplat
-       shell: bash
-       run: |
-         wget https://github.com/orb-community/CrashpadTools/raw/main/linux/dump_syms
-         chmod a+x ./dump_syms
-         wget https://github.com/orb-community/CrashpadTools/raw/main/linux/symupload
-         chmod a+x ./symupload
-         ./dump_syms ${{github.workspace}}/pktvisord > pktvisor.sym
-         ./symupload -k ${{secrets.BUGSPLAT_KEY}} pktvisor.sym ${{secrets.BUGSPLAT_SYMBOL_URL}}${{env.VERSION}} 2>/dev/null
+      - name: Get VERSION
+        id: build
+        run: echo "VERSION=`cat ${{github.workspace}}/build/VERSION`" >> $GITHUB_ENV
+ 
+      - name: move files
+        shell: bash
+        run: |
+          cp -rf ${{github.workspace}}/build/bin/pktvisord ${{github.workspace}}/pktvisord
+          strip -s  ${{github.workspace}}/build/bin/crashpad_handler
+          cp -rf ${{github.workspace}}/build/bin/crashpad_handler ${{github.workspace}}/crashpad_handler
+          cp -rf ${{github.workspace}}/build/bin/pktvisor-reader ${{github.workspace}}/pktvisor-reader
+          cp -rf ${{github.workspace}}/golang/pkg/client/version.go ${{github.workspace}}/version.go
+          cp -rf ${{github.workspace}}/src/tests/fixtures/pktvisor-port-service-names.csv ${{github.workspace}}/custom-iana.csv
+ 
+      - name: Push symbols to bugsplat
+        shell: bash
+        run: |
+          wget https://github.com/orb-community/CrashpadTools/raw/main/linux/dump_syms
+          chmod a+x ./dump_syms
+          wget https://github.com/orb-community/CrashpadTools/raw/main/linux/symupload
+          chmod a+x ./symupload
+          ./dump_syms ${{github.workspace}}/pktvisord > pktvisor.sym
+          ./symupload -k ${{secrets.BUGSPLAT_KEY}} pktvisor.sym ${{secrets.BUGSPLAT_SYMBOL_URL}}${{env.VERSION}} 2>/dev/null
 
       - name: Build pktvisor-cli
         uses: ./.github/actions/build-go
@@ -279,7 +279,6 @@ jobs:
         run: ls -lha .
         
       - name: Get VERSION
-        id: build
         run: |
           echo "VERSION=${{needs.unit-tests-linux.outputs.version_number}}" >> $GITHUB_ENV
 
