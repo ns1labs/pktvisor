@@ -114,6 +114,13 @@ jobs:
           LDFLAGS=${{matrix.ldflags}}
           EOF
 
+      - name: Setup Conan Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{github.workspace}}/src/build/p/
+          key: conan-${{ runner.os }}-${{matrix.arch}}-${{ hashFiles('**/conanfile.py') }}
+          restore-keys: conan-${{ runner.os }}-${{matrix.arch}}-
+
       - name: Install dependencies
         working-directory: ${{github.workspace}}/src
         run: |

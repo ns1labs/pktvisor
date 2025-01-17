@@ -476,8 +476,8 @@ jobs:
             -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake \
             -DCONAN_HOST_PROFILE="host" \
             -DCORRADE_RC_PROGRAM=$(command -v corrade-rc) \
-            -DCONAN_INSTALL_ARGS=--build=never 
-  
+            -DCONAN_INSTALL_ARGS=--build=never
+
       - name: Build
         working-directory: ${{github.workspace}}/build
         shell: bash
@@ -487,7 +487,6 @@ jobs:
         shell: bash
         run: |
           cp -rf ${{github.workspace}}/build/bin/pktvisord ${{github.workspace}}/pktvisord
-          strip -s  ${{github.workspace}}/build/bin/crashpad_handler
           cp -rf ${{github.workspace}}/build/bin/crashpad_handler ${{github.workspace}}/crashpad_handler
           cp -rf ${{github.workspace}}/build/bin/pktvisor-reader ${{github.workspace}}/pktvisor-reader
           cp -rf ${{github.workspace}}/golang/pkg/client/version.go ${{github.workspace}}/version.go
