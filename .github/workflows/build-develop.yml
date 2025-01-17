@@ -452,7 +452,7 @@ jobs:
           cat > "$(conan config home)/profiles/host" << "EOF"
           [settings]
           os=Linux
-          arch=aarch64
+          arch=armv8
           compiler=gcc
           compiler.version=13
           compiler.cppstd=17
