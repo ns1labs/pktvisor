@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 ENV RUNTIME_DEPS "curl ca-certificates libasan6 wget gzip"
 
