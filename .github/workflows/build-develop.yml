@@ -239,35 +239,17 @@ jobs:
           key: conan-${{ runner.os }}-amd64-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-amd64
 
-      - name: Configure CMake
-        shell: bash
-        working-directory: ${{github.workspace}}/build
-        run: PKG_CONFIG_PATH=${{github.workspace}}/local/lib/pkgconfig cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake
- 
-      - name: Build
-        working-directory: ${{github.workspace}}/build
-        shell: bash
-        run: cmake --build . --config Release -- -j 4
- 
-      - name: move files
-        shell: bash
-        run: |
-          cp -rf ${{github.workspace}}/build/bin/pktvisord ${{github.workspace}}/pktvisord
-          strip -s  ${{github.workspace}}/build/bin/crashpad_handler
-          cp -rf ${{github.workspace}}/build/bin/crashpad_handler ${{github.workspace}}/crashpad_handler
-          cp -rf ${{github.workspace}}/build/bin/pktvisor-reader ${{github.workspace}}/pktvisor-reader
-          cp -rf ${{github.workspace}}/golang/pkg/client/version.go ${{github.workspace}}/version.go
-          cp -rf ${{github.workspace}}/src/tests/fixtures/pktvisor-port-service-names.csv ${{github.workspace}}/custom-iana.csv
- 
-      - name: Push symbols to bugsplat
-        shell: bash
-        run: |
-          wget https://github.com/orb-community/CrashpadTools/raw/main/linux/dump_syms
-          chmod a+x ./dump_syms
-          wget https://github.com/orb-community/CrashpadTools/raw/main/linux/symupload
-          chmod a+x ./symupload
-          ./dump_syms ${{github.workspace}}/pktvisord > pktvisor.sym
-          ./symupload -k ${{secrets.BUGSPLAT_KEY}} pktvisor.sym ${{secrets.BUGSPLAT_SYMBOL_URL}}${{needs.unit-tests-linux.outputs.version_number}} 2>/dev/null
+      - name: Build pktvisord + push symbol to backtrace.io
+        uses: ./.github/actions/build-cpp
+        with:
+          context: "."
+          build_type: "Release"
+          asan: "OFF"
+          bugsplat_key: ${{secrets.BUGSPLAT_KEY}}
+          bugsplat_symbol_url: ${{secrets.BUGSPLAT_SYMBOL_URL}}
+          bugsplat: "false"
+          file: "./Dockerfile"
+          arch: "amd64"
 
       - name: Build pktvisor-cli
         uses: ./.github/actions/build-go
@@ -430,10 +412,6 @@ jobs:
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
 
-      - name: Get Conan
-        id: conan
-        uses: turtlebrowser/get-conan@c171f295f3f507360ee018736a6608731aa2109d #v1.2
-
       - name: Setup Conan Cache
         uses: actions/cache@v4
         with:
@@ -441,66 +419,17 @@ jobs:
           key: conan-${{ runner.os }}-arm64-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
           restore-keys: conan-${{ runner.os }}-arm64-
       
-      - name: Install Dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
-
-      - name: Create Conan host profile
-        run: |
-          conan profile detect
-          cat > "$(conan config home)/profiles/host" << "EOF"
-          [settings]
-          os=Linux
-          arch=armv8
-          compiler=gcc
-          compiler.version=13
-          compiler.cppstd=17
-          compiler.libcxx=libstdc++11
-          build_type=Release
-          [buildenv]
-          CC=/usr/bin/aarch64-linux-gnu-gcc
-          CXX=/usr/bin/aarch64-linux-gnu-g++
-          EOF
-
-      - name: Build Conan
-        run: conan install . --profile host --build missing
-
-      - name: Configure CMake
-        shell: bash
-        working-directory: ${{github.workspace}}/build
-        run: |
-          source Release/generators/conanbuild.sh
-          PKG_CONFIG_PATH=${{github.workspace}}/local/lib/pkgconfig cmake .. \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake \
-            -DCONAN_HOST_PROFILE="host" \
-            -DCORRADE_RC_PROGRAM=$(command -v corrade-rc) \
-            -DCONAN_INSTALL_ARGS=--build=never
-
-      - name: Build
-        working-directory: ${{github.workspace}}/build
-        shell: bash
-        run: cmake --build . --config Release -- -j 4
-  
-      - name: move files
-        shell: bash
-        run: |
-          cp -rf ${{github.workspace}}/build/bin/pktvisord ${{github.workspace}}/pktvisord
-          cp -rf ${{github.workspace}}/build/bin/crashpad_handler ${{github.workspace}}/crashpad_handler
-          cp -rf ${{github.workspace}}/build/bin/pktvisor-reader ${{github.workspace}}/pktvisor-reader
-          cp -rf ${{github.workspace}}/golang/pkg/client/version.go ${{github.workspace}}/version.go
-          cp -rf ${{github.workspace}}/src/tests/fixtures/pktvisor-port-service-names.csv ${{github.workspace}}/custom-iana.csv
-  
-      - name: Push symbols to bugsplat
-        shell: bash
-        run: |
-          wget https://github.com/orb-community/CrashpadTools/raw/main/linux/dump_syms
-          chmod a+x ./dump_syms
-          wget https://github.com/orb-community/CrashpadTools/raw/main/linux/symupload
-          chmod a+x ./symupload
-          ./dump_syms ${{github.workspace}}/pktvisord > pktvisor.sym
-          ./symupload -k ${{secrets.BUGSPLAT_KEY}} pktvisor.sym ${{secrets.BUGSPLAT_SYMBOL_URL}}arm-${{needs.unit-tests-linux.outputs.version_number}} 2>/dev/null
+      - name: Build pktvisord + push symbol to backtrace.io
+        uses: ./.github/actions/build-cpp
+        with:
+          context: "."
+          build_type: "Release"
+          asan: "OFF"
+          bugsplat_key: ${{secrets.BUGSPLAT_KEY}}
+          bugsplat_symbol_url: ${{secrets.BUGSPLAT_SYMBOL_URL}}
+          bugsplat: "false"
+          file: "./Dockerfile"
+          arch: "arm64"
 
       - name: Build pktvisor-cli
         uses: ./.github/actions/build-go

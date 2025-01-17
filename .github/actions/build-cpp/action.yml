@@ -33,6 +33,11 @@ inputs:
     required: true
     default: "ON"
 
+  arch:
+    description: "arch"
+    required: true
+    default: "amd64"
+
   file:
     description: "Dockerfile used to build the image"
     required: true
