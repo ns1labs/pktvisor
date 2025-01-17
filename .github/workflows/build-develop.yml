@@ -448,6 +448,7 @@ jobs:
 
       - name: Create Conan host profile
         run: |
+          conan profile detect
           cat > "$(conan config home)/profiles/host" << "EOF"
           [settings]
           os=Linux
