@@ -469,10 +469,13 @@ jobs:
       - name: Configure CMake
         shell: bash
         working-directory: ${{github.workspace}}/build
-        run: PKG_CONFIG_PATH=${{github.workspace}}/local/lib/pkgconfig cmake .. \
+        run: |
+          source Release/generators/conanbuild.sh
+          PKG_CONFIG_PATH=${{github.workspace}}/local/lib/pkgconfig cmake .. \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake \
             -DCONAN_HOST_PROFILE="host" \
+            -DCORRADE_RC_PROGRAM=$(command -v corrade-rc) \
             -DCONAN_INSTALL_ARGS=--build=never 
   
       - name: Build
