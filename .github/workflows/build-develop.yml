@@ -228,10 +228,6 @@ jobs:
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
 
-      - name: Get Conan
-        id: conan
-        uses: turtlebrowser/get-conan@c171f295f3f507360ee018736a6608731aa2109d #v1.2
-
       - name: Setup Conan Cache
         uses: actions/cache@v4
         with:
