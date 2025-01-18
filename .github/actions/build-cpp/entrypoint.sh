@@ -23,7 +23,7 @@ function build() {
   cd /pktvisor-src/
   conan profile detect -f
   cd /pktvisor-src/build/
-  if [ "$INPUT_ARCH" == "amd64"]; then
+  if [ "$INPUT_ARCH" == "amd64" ]; then
     PKG_CONFIG_PATH=/local/lib/pkgconfig cmake .. -DCMAKE_BUILD_TYPE=$INPUT_BUILD_TYPE \
      -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake -DASAN=$INPUT_ASAN
   elif [ "$INPUT_ARCH" == "arm64" ]; then
