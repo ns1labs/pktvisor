@@ -591,8 +591,8 @@ pktvisor is developed and tested on Linux and OSX. A Windows port is in progress
 
 #### Dependencies
 
-* [Conan](https://conan.io/) 1.X C++ package manager
-* CMake >= 3.13 (`cmake`)
+* [Conan](https://conan.io/) 2.X C++ package manager
+* CMake >= 3.24 (`cmake`)
 * C++ compiler supporting C++17
 
 For the list of packages included by conan, see [conanfile.py](conanfile.py)
@@ -604,9 +604,9 @@ The general build steps are:
 ```
 # clone the repository
 git clone https://github.com/netboxlabs/pktvisor.git
-cd pktvisor
-mkdir build && cd build
-
+cd pktvisor/
+conan profile detect -f
+cd build/
 # configure and handle dependencies 
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake ..
 
