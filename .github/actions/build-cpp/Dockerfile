@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM ubuntu:noble
 
 ENV BUILD_DEPS "g++ cmake make git pkgconf jq python3 python3-pip python3-setuptools ca-certificates zip curl wget gcc-aarch64-linux-gnu g++-aarch64-linux-gnu"
 
