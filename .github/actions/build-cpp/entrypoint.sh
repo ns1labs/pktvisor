@@ -39,7 +39,7 @@ function build() {
     CC=/usr/bin/aarch64-linux-gnu-gcc
     CXX=/usr/bin/aarch64-linux-gnu-g++
     " | tee "$(conan config home)/profiles/host"
-    conan install . --profile host --build missing
+    conan install .. --profile host --build missing
     source $INPUT_BUILD_TYPE/generators/conanbuild.sh
     PKG_CONFIG_PATH=/local/lib/pkgconfig cmake .. -DCMAKE_BUILD_TYPE=$INPUT_BUILD_TYPE \
      -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=./cmake/conan_provider.cmake -DASAN=$INPUT_ASAN \
