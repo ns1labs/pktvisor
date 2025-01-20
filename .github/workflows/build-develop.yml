@@ -219,7 +219,7 @@ jobs:
     needs: [ unit-tests-linux ]
     runs-on: ubuntu-latest
     # if this is a push into one of our main branches (rather than just a pull request), we will also package
-    #if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request'
     outputs:
       version_number: ${{ env.VERSION }}
     steps:
@@ -233,7 +233,7 @@ jobs:
         with:
           path: ${{github.workspace}}/build/p/
           key: conan-${{ runner.os }}-amd64-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
-          restore-keys: conan-${{ runner.os }}-amd64
+          restore-keys: conan-${{ runner.os }}-amd64-
 
       - name: Build pktvisord + push symbol to backtrace.io
         uses: ./.github/actions/build-cpp
@@ -327,6 +327,13 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@c171f295f3f507360ee018736a6608731aa2109d #v1.2
 
+      - name: Setup Conan Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{github.workspace}}/build/p/
+          key: conan-${{ runner.os }}-amd64-${{ hashFiles('conanfile.py', '*/conanfile.py') }}
+          restore-keys: conan-${{ runner.os }}-amd64-
+
       - name: Configure CMake to generate VERSION
         shell: bash
         working-directory: ${{github.workspace}}/build
@@ -396,7 +403,7 @@ jobs:
   package-arm64:
     needs: [ unit-tests-linux ]
     runs-on: ubuntu-latest
-    #if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request'
     steps:
       - name: cleanup #https://github.com/actions/checkout/issues/211
         run: |
