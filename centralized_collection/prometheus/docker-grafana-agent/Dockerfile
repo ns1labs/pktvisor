@@ -7,7 +7,7 @@ COPY --from=agent /bin/grafana-agent /usr/local/bin/agent
 
 RUN  apt-get update \
   && apt-get install -y runit \
-  && rm -rf /var/lib/apt \
+  && rm -rf /var/lib/apt/lists/* \
   && mkdir -p /etc/runit/ \
   && mkdir -p /etc/agent/ \
   && mkdir -p /etc/agent/data \
