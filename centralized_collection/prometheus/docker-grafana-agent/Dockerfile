@@ -1,12 +1,12 @@
 ARG PKTVISOR_TAG=latest
-FROM grafana/agent:latest as agent
+FROM grafana/agent:latest AS agent
 
 FROM netboxlabs/pktvisor:${PKTVISOR_TAG}
 
 COPY --from=agent /bin/grafana-agent /usr/local/bin/agent
 
 RUN  apt-get update \
-  && apt-get install -y runit-init \
+  && apt-get install -y runit \
   && rm -rf /var/lib/apt \
   && mkdir -p /etc/runit/ \
   && mkdir -p /etc/agent/ \
