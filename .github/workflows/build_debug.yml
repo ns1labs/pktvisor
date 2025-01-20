@@ -1,8 +1,6 @@
 name: Debug Builds
 
 on:
-  pull_request:
-    branches: [ develop, master, release/** ]
   push:
     branches: [ develop, master, release/** ]
 
