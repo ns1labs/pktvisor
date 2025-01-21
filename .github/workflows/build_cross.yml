@@ -35,6 +35,7 @@ jobs:
             toolchain: http://musl.cc/aarch64-linux-musl-cross.tgz
             cc: aarch64-linux-musl-gcc
             cxx: aarch64-linux-musl-g++
+            ldflags: "-static"
     env:
       CC: gcc
       CXX: g++
