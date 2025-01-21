@@ -154,14 +154,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pktvisord-linux-${{matrix.arch}}-static
-          path: build/bin/pktvisord
+          path: ${{github.workspace}}/src/build/bin/pktvisord
           retention-days: 7
 
       - name: Upload pktvisor-reader
         uses: actions/upload-artifact@v4
         with:
           name: pktvisor-reader-linux-${{matrix.arch}}-static
-          path: build/bin/pktvisor-reader
+          path: ${{github.workspace}}/src/build/bin/pktvisor-reader
           retention-days: 7
 
   pkvisor-cli:
