@@ -1,6 +1,6 @@
 FROM ubuntu:noble
 
-ENV RUNTIME_DEPS "curl ca-certificates libasan6 wget gzip"
+ENV RUNTIME_DEPS "curl ca-certificates libasan8 wget gzip"
 
 RUN \
     apt-get update && \
