@@ -86,19 +86,17 @@ auto quantiles_sorted_view<T, C, A>::get_quantile(double rank, bool inclusive) c
 template<typename T, typename C, typename A>
 auto quantiles_sorted_view<T, C, A>::get_CDF(const T* split_points, uint32_t size, bool inclusive) const -> vector_double {
   if (entries_.empty()) throw std::runtime_error("operation is undefined for an empty sketch");
-  vector_double buckets(entries_.get_allocator());
-  if (entries_.size() == 0) return buckets;
   check_split_points(split_points, size);
-  buckets.reserve(size + 1);
-  for (uint32_t i = 0; i < size; ++i) buckets.push_back(get_rank(split_points[i], inclusive));
-  buckets.push_back(1);
-  return buckets;
+  vector_double ranks(entries_.get_allocator());
+  ranks.reserve(size + 1);
+  for (uint32_t i = 0; i < size; ++i) ranks.push_back(get_rank(split_points[i], inclusive));
+  ranks.push_back(1);
+  return ranks;
 }
 
 template<typename T, typename C, typename A>
 auto quantiles_sorted_view<T, C, A>::get_PMF(const T* split_points, uint32_t size, bool inclusive) const -> vector_double {
   auto buckets = get_CDF(split_points, size, inclusive);
-  if (buckets.size() == 0) return buckets;
   for (uint32_t i = size; i > 0; --i) {
     buckets[i] -= buckets[i - 1];
   }

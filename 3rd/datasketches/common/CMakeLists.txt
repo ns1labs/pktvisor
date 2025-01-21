@@ -43,4 +43,5 @@ target_sources(common
   		${CMAKE_CURRENT_SOURCE_DIR}/include/quantiles_sorted_view_impl.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/include/optional.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/include/version.hpp.in
+		${CMAKE_CURRENT_SOURCE_DIR}/include/xxhash64.h
 		)
